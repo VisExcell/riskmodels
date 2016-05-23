@@ -331,4 +331,57 @@ class GailRiskCalculator:
             self.bet2[6, i] = 0.00000000000000   #  # breast biopsy * age >=50 indicator
             self.bet2[7, i] = 0.00000000000000   # age 1st live birth *  # 1st degree rel
 
+        ''' LINE 432 BCPT.cs
+         age 1st live birth * # 1st degree rel
 
+         conversion factors (1-attributable risk) used in BCPT model
+        '''
+
+        self.rf2[0, 0] = 0.5788413   # age < 50, race = white, other        1 / 12 / 99
+        self.rf2[1, 0] = 0.5788413   # age >= 50, race = white, other
+
+        '''
+        /* 11/27/2007 SRamaiah.
+         * Based on Journal(JNCI djm223 LM) published on Dec 05, 2007 by Gail and other scientists,
+         * The new values are being used for african american woman
+         * as there were some major descrenpancies between CARE model and GAIL Model
+         */
+        '''
+
+        self.rf2[0, 1] = 0.72949880  # age < 50, race = African American    12 / 19 / 2007 based on david pee's input
+        self.rf2[1, 1] = 0.74397137  # age >= 50, race = African American
+        self.rf2[0, 2] = 0.5788413   # age < 50, race = hispanic             5 / 12 / 2000
+        self.rf2[1, 2] = 0.5788413   # age >= 50, race = hispanic
+
+        '''
+        conversion factors (1-attributable risk) used for "average woman"
+        '''
+
+        self.rf2[0, 3] = 1.0     # age < 50, race = white avg woman                11 / 21
+        self.rf2[1, 3] = 1.0     # age >= 50, race = white avg woman
+        self.rf2[0, 4] = 1.0     # age < 50, race = AfricanAmerican avg woman              11 / 21
+        self.rf2[1, 4] = 1.0     # age >= 50, race = AfricanAmerican avg woman
+        self.rf2[0, 5] = 1.0     # age < 50, race = hispanic avg woman             5 / 12
+        self.rf2[1, 5] = 1.0     # age >= 50, race = hispanic avg woman
+
+        ''' LINE 470 BCPT.cs
+        American-Asian conversion factor
+
+        VisExcell SRMOORE: Originally the following C# code:
+
+        i = 6;
+        for (i = 6; i <= 11; i++)
+        {
+            rf2[0, i] = 0.47519806426735;                // age < 50, avg woman
+            rf2[1, i] = 0.50316401683903;                // age >=50, avg woman
+        }
+        '''
+
+        for i in range(6,12):
+            self.rf2[0, i] = 0.47519806426735    # age < 50, avg woman
+            self.rf2[1, i] = 0.50316401683903    # age >= 50, avg woman
+
+        rf2[0, 12] = 1.0    # age < 50, race = hispanic avg woman        5 / 12
+        rf2[1, 12] = 1.0    # age >= 50, race = hispanic avg woman
+
+        '''LINE 481 BCPT.cs'''
