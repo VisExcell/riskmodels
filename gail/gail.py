@@ -96,3 +96,66 @@ class GailRiskCalculator:
         self.rmu2[12, 2] = 4186.6 * 0.00001  # // [80:85) race = hispanic
         self.rmu2[13, 2] = 8947.6 * 0.00001  # // [85:90) race = hispanic
 
+        '''
+        age specific competing hazards (h2) for "average woman"
+        (NCHS mortality 1992:95, excluding death from breast cancer - white, African American)
+        (US   mortality 1990:95, excluding death from breast cancer -     hispanic)
+        ages [20:25), [25:30), [30:35) .... [70:74), [75:80), [80:85), [85:90)
+        '''
+        self.rmu2[0, 3] = 44.12 * 0.00001       # // [20,25) race=white,other 11/21
+        self.rmu2[1, 3] = 52.54 * 0.00001       # // [24,30) race=white,other
+        self.rmu2[2, 3] = 67.46 * 0.00001       # // [30,35) race=white,other
+        self.rmu2[3, 3] = 90.92 * 0.00001       # // [34,40) race=white,other
+        self.rmu2[4, 3] = 125.34 * 0.00001      # // [40,45) race=white,other
+        self.rmu2[5, 3] = 195.70 * 0.00001      # // [44,50) race=white,other
+        self.rmu2[6, 3] = 329.84 * 0.00001      # // [50,55) race=white,other
+        self.rmu2[7, 3] = 546.22 * 0.00001      # // [54,60) race=white,other
+        self.rmu2[8, 3] = 910.35 * 0.00001      # // [60,65) race=white,other
+        self.rmu2[9, 3] = 1418.54 * 0.00001     # // [64,70) race=white,other
+        self.rmu2[10, 3] = 2259.35 * 0.00001    # // [70,75) race=white,other
+        self.rmu2[11, 3] = 3611.46 * 0.00001    # // [74,80) race=white,other
+        self.rmu2[12, 3] = 6136.26 * 0.00001    # // [80,84) race=white,other
+        self.rmu2[13, 3] = 14206.63 * 0.00001   # // [84,90) race=white,other
+
+        '''
+        11/29/2007 SRamaiah - updated age specific competing hazards (h2)
+                with new values from NCHS 1996-00 data for African American Women
+                Updated array rmu2[*, 4] with following new values for African American Women
+        '''
+
+        self.rmu2[0, 4] = 0.00074354   # // [20, 25) race = African American        11 / 28 / 07
+        self.rmu2[1, 4] = 0.00101698   # // [24, 30) race = African American
+        self.rmu2[2, 4] = 0.00145937   # // [30, 35) race = African American
+        self.rmu2[3, 4] = 0.00215933   # // [34, 40) race = African American
+        self.rmu2[4, 4] = 0.00315077   # // [40, 45) race = African American
+        self.rmu2[5, 4] = 0.00448779   # // [44, 50) race = African American
+        self.rmu2[6, 4] = 0.00632281   # // [50, 55) race = African American
+        self.rmu2[7, 4] = 0.00963037   # // [54, 60) race = African American
+        self.rmu2[8, 4] = 0.01471818   # // [60, 65) race = African American
+        self.rmu2[9, 4] = 0.02116304   # // [64, 70) race = African American
+        self.rmu2[10, 4] = 0.03266035  # // [70, 75) race = African American
+        self.rmu2[11, 4] = 0.04564087  # // [74, 80) race = African American
+        self.rmu2[12, 4] = 0.06835185  # // [80, 84) race = African American
+        self.rmu2[13, 4] = 0.13271262  # // [84, 90) race = African American
+
+        self.rmu2[0, 5] = 43.7 * 0.00001     # // [20:25) race = hispanic        5 / 12 / 00
+        self.rmu2[1, 5] = 53.3 * 0.00001     # // [25:30) race = hispanic
+        self.rmu2[2, 5] = 70.0 * 0.00001     # // [30:35) race = hispanic
+        self.rmu2[3, 5] = 89.7 * 0.00001     # // [35:40) race = hispanic
+        self.rmu2[4, 5] = 116.3 * 0.00001    # // [40:45) race = hispanic
+        self.rmu2[5, 5] = 170.2 * 0.00001    # // [45:50) race = hispanic
+        self.rmu2[6, 5] = 264.6 * 0.00001    # // [50:55) race = hispanic
+        self.rmu2[7, 5] = 421.6 * 0.00001    # // [55:60) race = hispanic
+        self.rmu2[8, 5] = 696.0 * 0.00001    # // [60:65) race = hispanic
+        self.rmu2[9, 5] = 1086.7 * 0.00001   # // [65:70) race = hispanic
+        self.rmu2[10, 5] = 1685.8 * 0.00001  # // [70:75) race = hispanic
+        self.rmu2[11, 5] = 2515.6 * 0.00001  # // [75:80) race = hispanic
+        self.rmu2[12, 5] = 4186.6 * 0.00001  # // [80:85) race = hispanic
+        self.rmu2[13, 5] = 8947.6 * 0.00001  # // [85:90) race = hispanic
+
+
+
+
+
+
+
