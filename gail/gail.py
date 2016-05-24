@@ -739,8 +739,8 @@ class GailRiskCalculator:
             self.rf[1] = self.rf2[1, incr + irace - 1]  # /* based on race */
 
             if riskindex == 2 and irace >= 7:
-                self.rf[0] = rf2[0, 12] # /* selecting correct fac */
-                self.rf[1] = rf2[1, 12] # /* based on race */
+                self.rf[0] = self.rf2[0, 12] # /* selecting correct fac */
+                self.rf[1] = self.rf2[1, 12] # /* based on race */
 
             # Line 877 BCPT.cs
             if riskindex >= 2:  # //&& irace < 7)  (From original)
@@ -798,3 +798,62 @@ class GailRiskCalculator:
                     r8iTox2[(j - 1) * 36 + k - 1, 3] = np.float64(0.0)
                     r8iTox2[(j - 1) * 36 + 12 + k - 1, 3] = np.float64(1.0)
                     r8iTox2[(j - 1) * 36 + 24 + k - 1, 3] = np.float64(2.0)
+
+            for j in range(1,19):
+                # /* col5: age ist live birt */
+                for k in range(1,4):
+                    r8iTox2[(j - 1) * 12 + k - 1, 4] = np.float64(0.0)
+                    r8iTox2[(j - 1) * 12 + 3 + k - 1, 4] = np.float64(1.0)
+                    r8iTox2[(j - 1) * 12 + 6 + k - 1, 4] = np.float64(2.0)
+                    r8iTox2[(j - 1) * 12 + 9 + k - 1, 4] = np.float64(3.0)
+
+            for j in range(1,73):
+                # /* col6: # 1st degree re */
+                r8iTox2[(j - 1) * 3 + 1 - 1, 5] = np.float64(0.0)
+                r8iTox2[(j - 1) * 3 + 2 - 1, 5] = np.float64(1.0)
+                r8iTox2[(j - 1) * 3 + 3 - 1, 5] = np.float64(2.0)
+
+            for i in range(216):
+                '''
+                /* col8: age 1st live*# r */
+                /* col7: age*#biop intera */
+                '''
+                r8iTox2[i, 6] = r8iTox2[i, 1] * r8iTox2[i, 3]
+                r8iTox2[i, 7] = r8iTox2[i, 4] * r8iTox2[i, 5]
+
+                # Consolidating for loop at Line 967 BCPT.cs
+                # //HACK r8iTox2[i + 1727] = 1.0;
+                r8iTox2[i, 8] = np.float64(1.0)
+
+            ''' Line 974 BCPT.cs
+            /* **  Computation of breast cancer risk */
+            /* **  sum(bi*Xi) for all covariate patterns */
+            '''
+            for i in range(self.NumCovPattInGailModel):
+                self.sumb[i] = np.float64(0)
+                for j in range(8):
+                    self.sumb[i] += self.bet[j] * r8iTox2[i, j]
+            # Line 985 BCPT.cs
+            for i in range(1,109):
+                # /* eliminate int */
+                self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0]
+            for i in range(109,self.NumCovPattInGailModel+1):
+                # /* eliminate intercept */
+                self.summb[i - 1] = self.sumb[i - 1] - self.bet[0] - self.bet[1]
+            # Line 995 BCPT.cs
+            for j in range(1,7):
+                # /* age specific baseline hazard */
+                self.rlan[j - 1] *= self.rf[0]
+            for j in range(7,15):
+                # /* age specific baseline hazard */
+                self.rlan[j - 1] *= self.rf[1]
+
+            i = self.ilev
+            ''' /* index ilev of range 1- */
+            /* setting i to covariate p */
+            // HACK CHECK LOG VALUE
+            Original: Line 1008
+            sumbb[i - 1] += Math.Log(rhyp);'''
+            self.sumbb[i - 1] += np.log(self.rhyp)
+            if i <= 108:
+                self.sumbb[i + 107] += np.log(self.rhyp)
