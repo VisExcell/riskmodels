@@ -630,230 +630,430 @@ class GailRiskCalculator:
 
         ### END Initialize(self)
 
-        '''
-        Line 699 BCPT.cs
-        private double CalculateAbosluteRisk(...)
-        '''
-        def CalculateAbsoluteRisk(self):
-            #TODO: DO CalculateAbsoluteRisk
-            pass
+    '''
+    Line 699 BCPT.cs
+    private double CalculateAbosluteRisk(...)
+    '''
+    def CalculateAbsoluteRisk(self,
+                      CurrentAge,           # int    [t1]
+                      ProjectionAge,        # int    [t2]
+                      AgeIndicator,         # int    [i0]
+                      NumberOfBiopsy,       # int    [i2]
+                      MenarcheAge,          # int    [i1]
+                      FirstLiveBirthAge,    # int    [i3]
+                      EverHadBiopsy,        # int    [iever]
+                      FirstDegRelatives,    # int    [i4]
+                      ihyp,                 # int    [ihyp]  HyperPlasia
+                      rhyp,                 # double [rhyp]  RHyperPlasia
+                      irace                 # int    [race]
+                    ):
+        return self.CalculateRisk(1, CurrentAge, ProjectionAge, AgeIndicator,
+                                  NumberOfBiopsy, MenarcheAge, FirstLiveBirthAge, EverHadBiopsy,
+                                  FirstDegRelatives, ihyp, rhyp, irace)
+
+    '''
+    Line 727 BCPT.cs
+    private double calculateAeverageRisk(...)
+    NOTE: Mis-spelled in original.
+    '''
+    def CalculateAeverageRisk(self,
+                      CurrentAge,           # int    [t1]
+                      ProjectionAge,        # int    [t2]
+                      AgeIndicator,         # int    [i0]
+                      NumberOfBiopsy,       # int    [i2]
+                      MenarcheAge,          # int    [i1]
+                      FirstLiveBirthAge,    # int    [i3]
+                      EverHadBiopsy,        # int    [iever]
+                      FirstDegRelatives,    # int    [i4]
+                      ihyp,                 # int    [ihyp]  HyperPlasia
+                      rhyp,                 # double [rhyp]  RHyperPlasia
+                      irace                 # int    [race]
+                    ):
+        return self.CalculateRisk(2, CurrentAge, ProjectionAge, AgeIndicator,
+                                  NumberOfBiopsy, MenarcheAge, FirstLiveBirthAge, EverHadBiopsy,
+                                  FirstDegRelatives, ihyp, rhyp, irace)
+
+    '''
+    Line 755 BCPT.cs
+    private double CalculateRisk(...)
+    '''
+    def CalculateRisk(self,
+                      riskindex,            # int    [1 = Abs, 2 = Ave]
+                      CurrentAge,           # int    [t1]
+                      ProjectionAge,        # int    [t2]
+                      AgeIndicator,         # int    [i0]
+                      NumberOfBiopsy,       # int    [i2]
+                      MenarcheAge,          # int    [i1]
+                      FirstLiveBirthAge,    # int    [i3]
+                      EverHadBiopsy,        # int    [iever]
+                      FirstDegRelatives,    # int    [i4]
+                      ihyp,                 # int    [ihyp]  HyperPlasia
+                      rhyp,                 # double [rhyp]  RHyperPlasia
+                      irace                 # int    [race]
+                    ):
+        # Local Variables
+        retval = np.float64(0.0)
+        # i = 0  # SRMOORE: no initalizer needed as we use in for loops and such.
+        j = 0
+        k = 0
+        n = 0
+        r = np.float64(0.0)
+        ni = 0
+        # ti = np.float64(0.0)
+        ns = 0
+        ts = np.float64(0.0)
+        abss = np.float64(0.0)
+        incr = 0
+        ilev = 0
+        r8iTox2 = np.zeros((self.NumCovPattInGailModel,9),dtype=np.float64)
+        n = self.NumCovPattInGailModel
+        r = np.float64(0.0)
+
+        # // HACK (According to BCPT.cs line 795)
+        # setting ni and ns to 0
+        # TODO: SRMOORE: Move these to the variable initaliziers up above. Leaving here for parity with original
+        ti = np.float64(CurrentAge)
+        ts = np.float64(ProjectionAge)
 
         '''
-        Line 727 BCPT.cs
-        private double calculateAeverageRisk(...)
-        NOTE: Mis-spelled in original.
+        /*11/29/2007 SR: setting BETA to race specific lnRR*/
         '''
-        def CalculateAeverageRisk(self):
-            #TODO: Do CalculateAeverageRisk
-            pass
+        for i in range(8):
+            self.bet[i] = self.bet2[i, irace - 1]   # //index starts from 0 hence irace-1
 
         '''
-        Line 755 BCPT.cs
-        private double CalculateRisk(...)
+        /*11/29/2007 SR: recode agemen for African American women*/
         '''
-        def CalculateRisk(self,
-                          riskindex,            #int    [1 = Abs, 2 = Ave]
-                          CurrentAge,           #int    [t1]
-                          ProjectionAge,        #int    [t2]
-                          AgeIndicator,         #int    [i0]
-                          NumberOfBiopsy,       #int    [i2]
-                          MenarcheAge,          #int    [i1]
-                          FirstLiveBirthAge,    #int    [i3]
-                          EverHadBiopsy,        #int    [iever]
-                          FirstDegRelatives,    #int    [i4]
-                          ihyp,                 #int    [ihyp]  HyperPlasia
-                          rhyp,                 #double [rhyp]  RHyperPlasia
-                          irace                 #int    [race]
-                        ):
-            #Local Variables
-            retval = np.float64(0.0)
-            #i = 0  #SRMOORE: no initalizer needed as we use in for loops and such.
-            j = 0
-            k = 0
-            n = 0
-            r = np.float64(0.0)
-            ni = 0
-            ti = np.float64(0.0)
-            ns = 0
-            ts = np.float64(0.0)
-            abss = np.float64(0.0)
-            incr = 0
-            ilev = 0
-            r8iTox2 = np.zeros((self.NumCovPattInGailModel,9),dtype=np.float64)
-            n = self.NumCovPattInGailModel
-            r = np.float64(0.0)
+        if irace == 2:
+            if MenarcheAge == 2:
+                MenarcheAge = 1         # // recode agemen=2 (age<12) to agmen=1 [12,13]
+                FirstLiveBirthAge = 0   # // set age 1st live birth to 0
 
-            # // HACK (According to BCPT.cs line 795)
-            # setting ni and ns to 0
-            # TODO: SRMOORE: Move these to the variable initaliziers up above. Leaving here for parity with original
-            ti = np.float64(CurrentAge)
-            ts = np.float64(ProjectionAge)
+        ''' Line 821 BCPT.cs '''
+        for i in range(1,16):   # for (i = 1; i <= 15, i++)
+            # /* i-1=14 ==> current age=85, max for curre */
+            if ti < self.t[i - 1]:
+                # //TODO CHECK THE INDEX (From original)
+                ni = i - 1  # /* ni holds the index for current */
+                break       # //goto L70    (This is from the original. figure out where this is supposed to go
 
+        for i in range(1,16):
+            if ts <= self.t[i - 1]:
+                # //!!!TODO CHECK THE INDEX (From original)
+                ns = i - 1
+                break
+        incr = 0    # TODO SRMOORE: Not needed?
+        if riskindex == 2 and irace < 7:
+            # //HACK CHECK THIS  (From original Line 843 )
+            incr = 3
 
-            '''/*11/29/2007 SR: setting BETA to race specific lnRR*/'''
-            for i in range(8):
-                self.bet[i] = self.bet2[i, irace - 1]   # //index starts from 0 hence irace-1
+        '''
+        /* for race specific "avg women" */
+        /* otherwise use cols 1,2,3 depen */
+        /* on users race                5 */
+        /* use cols 4,5,6 from rmu, rla */
 
-            '''/*11/29/2007 SR: recode agemen for African American women*/'''
-            if irace == 2:
-                if MenarcheAge == 2:
-                    MenarcheAge = 1         # // recode agemen=2 (age<12) to agmen=1 [12,13]
-                    FirstLiveBirthAge = 0   # // set age 1st live birth to 0
+        //TODO Check this
+        /* select race specific */
+        '''
+        # cindx = 0   # //column index  TODO SRMOORE: optimize this, get rid of the initialization here
+        cindx = incr + irace - 1
 
-            ''' Line 821 BCPT.cs '''
-            for i in range(1,16):   # for (i = 1; i <= 15, i++)
-                # /* i-1=14 ==> current age=85, max for curre */
-                if ti < self.t[i - 1]:
-                    # //TODO CHECK THE INDEX (From original)
-                    ni = i - 1  # /* ni holds the index for current */
-                    break       # //goto L70    (This is from the original... need to figure out where this is supposed to go
+        for i in range(14):
+            self.rmu[i] = self.rmu2[i, cindx]       # /* competeing baseline h */
+            self.rlan[i] = self.rlan2[i, cindx]     # /* br ca composite incid */
 
-            for i in range(1,16):
-                if ts <= self.t[i - 1]:
-                    # //!!!TODO CHECK THE INDEX (From original)
-                    ns = i - 1
-                    break
-            incr = 0    #TODO SRMOORE: Not needed?
-            if riskindex == 2 and irace < 7:
-                # //HACK CHECK THIS  (From original Line 843 )
-                incr = 3
+        # Line 868 BCPT.cs
+        self.rf[0] = self.rf2[0, incr + irace - 1]  # /* selecting correct fac */
+        self.rf[1] = self.rf2[1, incr + irace - 1]  # /* based on race */
 
+        if riskindex == 2 and irace >= 7:
+            self.rf[0] = self.rf2[0, 12] # /* selecting correct fac */
+            self.rf[1] = self.rf2[1, 12] # /* based on race */
+
+        # Line 877 BCPT.cs
+        if riskindex >= 2:  # //&& irace < 7)  (From original)
+            # /* set risk factors to */
+            MenarcheAge = 0         # // baseline age menarchy
+            NumberOfBiopsy = 0      # //  # of previous biop
+            FirstLiveBirthAge = 0   # // age 1st live birth
+            FirstDegRelatives = 0   # //  # 1st degree relat
+            rhyp = np.float64(1.0)  # // set hyperplasia to 1.0
+
+        ilev = AgeIndicator * 108 + MenarcheAge * 36 + NumberOfBiopsy * 12 + FirstLiveBirthAge * 3 \
+               + FirstDegRelatives + 1  # /* matrix of */
+
+        ''' Line 889 of BCPT.cs
+         /* covariate */
+        /* range of 1 */
+        /* AgeIndicator: age ge 50 ind  0=[20, 50) */
+        /*                    1=[50, 85) */
+        /* MenarcheAge: age menarchy   0=[14, 39] U 99 (unknown) */
+        /*                    1=[12, 14) */
+        /*                    2=[ 7, 12) */
+        /* NumberOfBiopsy: # biopsy       0=0 or (99 and ever had biopsy=99 */
+        /*                    1=1 or (99 and ever had biopsy=1 y */
+        /*                    2=[ 2, 30] */
+        /* FirstLiveBirthAge: age 1st live   0=<20, 99 (unknown) */
+        /*                    1=[20, 25) */
+        /*                    2=[25, 30) U 0 */
+        /*                    3=[30, 55] */
+        /* FirstDegRelatives: 1st degree rel 0=0, 99 (unknown) */
+        /*                    1=1 */
+        /*                    2=[2, 31] */
+        /* **  Correspondence between exposure level and covariate factors X */
+        /* **  in the logistic model */
+        /* **  i-to-X correspondence */
+        /* index in r8i */
+        '''
+        for k in range(self.NumCovPattInGailModel):  # Note: I've been using NumCovPattInGailModel when I see 216
+            # /* col1: intercept o */
+            r8iTox2[k, 0] = np.float64(1.0)
+
+        for k in range(108):    # really is NumCovPattInGailModel / 2
+            # /* col2: indicator for age */
+            r8iTox2[k, 1] = np.float64(0.0)
+            r8iTox2[108 + k, 1] = np.float(1.0)
+
+        for j in range(1, 3):       # note, since we always subtract 1 from j and k, we could zero base these
+            # /* col3: age menarchy cate */
+            for k in range(1, 37):
+                r8iTox2[(j - 1) * 108 + k - 1, 2] = np.float64(0.0)
+                r8iTox2[(j - 1) * 108 + 36 + k - 1, 2] = np.float64(1.0)
+                r8iTox2[(j - 1) * 108 + 72 + k - 1, 2] = np.float64(2.0)
+
+        for j in range(1,7):
+            # /* col4: # biopsy cate */
+            for k in range(1,13):
+                r8iTox2[(j - 1) * 36 + k - 1, 3] = np.float64(0.0)
+                r8iTox2[(j - 1) * 36 + 12 + k - 1, 3] = np.float64(1.0)
+                r8iTox2[(j - 1) * 36 + 24 + k - 1, 3] = np.float64(2.0)
+
+        for j in range(1,19):
+            # /* col5: age ist live birt */
+            for k in range(1,4):
+                r8iTox2[(j - 1) * 12 + k - 1, 4] = np.float64(0.0)
+                r8iTox2[(j - 1) * 12 + 3 + k - 1, 4] = np.float64(1.0)
+                r8iTox2[(j - 1) * 12 + 6 + k - 1, 4] = np.float64(2.0)
+                r8iTox2[(j - 1) * 12 + 9 + k - 1, 4] = np.float64(3.0)
+
+        for j in range(1,73):
+            # /* col6: # 1st degree re */
+            r8iTox2[(j - 1) * 3 + 1 - 1, 5] = np.float64(0.0)
+            r8iTox2[(j - 1) * 3 + 2 - 1, 5] = np.float64(1.0)
+            r8iTox2[(j - 1) * 3 + 3 - 1, 5] = np.float64(2.0)
+
+        for i in range(216):
             '''
-            /* for race specific "avg women" */
-            /* otherwise use cols 1,2,3 depen */
-            /* on users race                5 */
-            /* use cols 4,5,6 from rmu, rla */
-
-            //TODO Check this
-            /* select race specific */
+            /* col8: age 1st live*# r */
+            /* col7: age*#biop intera */
             '''
-            cindx = 0   # //column index  TODO SRMOORE: optimize this, get rid of the initialization here
-            cindx = incr + irace - 1
+            r8iTox2[i, 6] = r8iTox2[i, 1] * r8iTox2[i, 3]
+            r8iTox2[i, 7] = r8iTox2[i, 4] * r8iTox2[i, 5]
 
-            for i in range(14):
-                self.rmu[i] = self.rmu2[i, cindx]       # /* competeing baseline h */
-                self.rlan[i] = self.rlan2[i, cindx]     # /* br ca composite incid */
+            # Consolidating for loop at Line 967 BCPT.cs
+            # //HACK r8iTox2[i + 1727] = 1.0;
+            r8iTox2[i, 8] = np.float64(1.0)
 
-            # Line 868 BCPT.cs
-            self.rf[0] = self.rf2[0, incr + irace - 1]  # /* selecting correct fac */
-            self.rf[1] = self.rf2[1, incr + irace - 1]  # /* based on race */
+        ''' Line 974 BCPT.cs
+        /* **  Computation of breast cancer risk */
+        /* **  sum(bi*Xi) for all covariate patterns */
+        '''
+        for i in range(self.NumCovPattInGailModel):
+            self.sumb[i] = np.float64(0)
+            for j in range(8):
+                self.sumb[i] += self.bet[j] * r8iTox2[i, j]
+        # Line 985 BCPT.cs
+        for i in range(1,109):
+            # /* eliminate int */
+            self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0]
+        for i in range(109,self.NumCovPattInGailModel+1):
+            # /* eliminate intercept */
+            self.summb[i - 1] = self.sumb[i - 1] - self.bet[0] - self.bet[1]
+        # Line 995 BCPT.cs
+        for j in range(1,7):
+            # /* age specific baseline hazard */
+            self.rlan[j - 1] *= self.rf[0]
+        for j in range(7,15):
+            # /* age specific baseline hazard */
+            self.rlan[j - 1] *= self.rf[1]
 
-            if riskindex == 2 and irace >= 7:
-                self.rf[0] = self.rf2[0, 12] # /* selecting correct fac */
-                self.rf[1] = self.rf2[1, 12] # /* based on race */
+        i = self.ilev
+        ''' /* index ilev of range 1- */
+        /* setting i to covariate p */
+        // HACK CHECK LOG VALUE
+        Original: Line 1008
+        sumbb[i - 1] += Math.Log(rhyp);'''
+        self.sumbb[i - 1] += np.log(self.rhyp)
+        if i <= 108:
+            self.sumbb[i + 107] += np.log(self.rhyp)
 
-            # Line 877 BCPT.cs
-            if riskindex >= 2:  # //&& irace < 7)  (From original)
-                # /* set risk factors to */
-                MenarcheAge = 0         # // baseline age menarchy
-                NumberOfBiopsy = 0      # //  # of previous biop
-                FirstLiveBirthAge = 0   # // age 1st live birth
-                FirstDegRelatives = 0   # //  # 1st degree relat
-                rhyp = np.float64(1.0)  # // set hyperplasia to 1.0
-
-            ilev = AgeIndicator * 108 + MenarcheAge * 36 + NumberOfBiopsy * 12 + FirstLiveBirthAge * 3 + FirstDegRelatives + 1 # /* matrix of */
-
-            ''' Line 889 of BCPT.cs
-             /* covariate */
-            /* range of 1 */
-            /* AgeIndicator: age ge 50 ind  0=[20, 50) */
-            /*                    1=[50, 85) */
-            /* MenarcheAge: age menarchy   0=[14, 39] U 99 (unknown) */
-            /*                    1=[12, 14) */
-            /*                    2=[ 7, 12) */
-            /* NumberOfBiopsy: # biopsy       0=0 or (99 and ever had biopsy=99 */
-            /*                    1=1 or (99 and ever had biopsy=1 y */
-            /*                    2=[ 2, 30] */
-            /* FirstLiveBirthAge: age 1st live   0=<20, 99 (unknown) */
-            /*                    1=[20, 25) */
-            /*                    2=[25, 30) U 0 */
-            /*                    3=[30, 55] */
-            /* FirstDegRelatives: 1st degree rel 0=0, 99 (unknown) */
-            /*                    1=1 */
-            /*                    2=[2, 31] */
-            /* **  Correspondence between exposure level and covariate factors X */
-            /* **  in the logistic model */
-            /* **  i-to-X correspondence */
-            /* index in r8i */
+        if ts <= self.t[ni]:
             '''
-            for k in range(self.NumCovPattInGailModel): # Note: I've been using NumCovPattInGailModel when I see 216
-                # /* col1: intercept o */
-                r8iTox2[k, 0] = np.float64(1.0)
-
-            for k in range(108):    # really is NumCovPattInGailModel / 2
-                # /* col2: indicator for age */
-                r8iTox2[k, 1] = np.float64(0.0)
-                r8iTox2[108 + k, 1] = np.float(1.0)
-
-            for j in range(1, 3):       # note, since we always subtract 1 from j and k, we could zero base these
-                # /* col3: age menarchy cate */
-                for k in range(1, 37):
-                    r8iTox2[(j - 1) * 108 + k - 1, 2] = np.float64(0.0)
-                    r8iTox2[(j - 1) * 108 + 36 + k - 1, 2] = np.float64(1.0)
-                    r8iTox2[(j - 1) * 108 + 72 + k - 1, 2] = np.float64(2.0)
-
-            for j in range(1,7):
-                # /* col4: # biopsy cate */
-                for k in range(1,13):
-                    r8iTox2[(j - 1) * 36 + k - 1, 3] = np.float64(0.0)
-                    r8iTox2[(j - 1) * 36 + 12 + k - 1, 3] = np.float64(1.0)
-                    r8iTox2[(j - 1) * 36 + 24 + k - 1, 3] = np.float64(2.0)
-
-            for j in range(1,19):
-                # /* col5: age ist live birt */
-                for k in range(1,4):
-                    r8iTox2[(j - 1) * 12 + k - 1, 4] = np.float64(0.0)
-                    r8iTox2[(j - 1) * 12 + 3 + k - 1, 4] = np.float64(1.0)
-                    r8iTox2[(j - 1) * 12 + 6 + k - 1, 4] = np.float64(2.0)
-                    r8iTox2[(j - 1) * 12 + 9 + k - 1, 4] = np.float64(3.0)
-
-            for j in range(1,73):
-                # /* col6: # 1st degree re */
-                r8iTox2[(j - 1) * 3 + 1 - 1, 5] = np.float64(0.0)
-                r8iTox2[(j - 1) * 3 + 2 - 1, 5] = np.float64(1.0)
-                r8iTox2[(j - 1) * 3 + 3 - 1, 5] = np.float64(2.0)
-
-            for i in range(216):
-                '''
-                /* col8: age 1st live*# r */
-                /* col7: age*#biop intera */
-                '''
-                r8iTox2[i, 6] = r8iTox2[i, 1] * r8iTox2[i, 3]
-                r8iTox2[i, 7] = r8iTox2[i, 4] * r8iTox2[i, 5]
-
-                # Consolidating for loop at Line 967 BCPT.cs
-                # //HACK r8iTox2[i + 1727] = 1.0;
-                r8iTox2[i, 8] = np.float64(1.0)
-
-            ''' Line 974 BCPT.cs
-            /* **  Computation of breast cancer risk */
-            /* **  sum(bi*Xi) for all covariate patterns */
+            /* same 5 year age risk in */
+            /* age & projection age wi */
             '''
-            for i in range(self.NumCovPattInGailModel):
-                self.sumb[i] = np.float64(0)
-                for j in range(8):
-                    self.sumb[i] += self.bet[j] * r8iTox2[i, j]
-            # Line 985 BCPT.cs
-            for i in range(1,109):
-                # /* eliminate int */
-                self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0]
-            for i in range(109,self.NumCovPattInGailModel+1):
-                # /* eliminate intercept */
-                self.summb[i - 1] = self.sumb[i - 1] - self.bet[0] - self.bet[1]
-            # Line 995 BCPT.cs
-            for j in range(1,7):
-                # /* age specific baseline hazard */
-                self.rlan[j - 1] *= self.rf[0]
-            for j in range(7,15):
-                # /* age specific baseline hazard */
-                self.rlan[j - 1] *= self.rf[1]
+            self.abs[i - 1] = np.float64(1) - np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) +
+                                                       self.rmu[ni - 1]) * (ts - ti))
 
-            i = self.ilev
-            ''' /* index ilev of range 1- */
-            /* setting i to covariate p */
-            // HACK CHECK LOG VALUE
-            Original: Line 1008
-            sumbb[i - 1] += Math.Log(rhyp);'''
-            self.sumbb[i - 1] += np.log(self.rhyp)
-            if i <= 108:
-                self.sumbb[i + 107] += np.log(self.rhyp)
+            self.abs[i - 1] = self.abs[i - 1] * self.rlan[ni - 1] \
+                              * np.exp(self.sumbb[i - 1]) / (self.rlan[ni - 1] * np.exp(self.sumbb[i - 1])
+                                                             + self.rmu[ni - 1])  # /* breast cance */
+
+        else:  # Line 1025 BCPT.cs
+            '''
+            /* 5 year age risk interval */
+            /* calculate risk from */
+            /* 1st age interval */
+            /* age & projection age not i */
+            '''
+            self.abs[i - 1] = 1.0 - np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1])
+                                             + self.rmu[ni - 1]) * (self.t[ni] - ti))
+            self.bs[i - 1] = self.abs[i - 1] * self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) \
+                             / (self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[ni - 1])  # /* age in */
+            ''' /* risk f */'''
+            if ns - ni > 0:
+                if np.float64(ProjectionAge) > np.float64(50.0) and np.float64(CurrentAge) < np.float64(50.0):
+                    ''' Line 1041 BCPT.cs
+                    /* a */
+                    /* s */
+                    /* a */
+                    /* calculate ris */
+                    /* last age inte */
+                    '''
+                    r = np.float64(1.0) - np.exp(-(self.rlan[ns - 1] * np.exp(self.sumbb[i + 107]) + self.rmu[ns - 1])
+                                                 * (ts - self.t[ns - 1]))
+                    r = r * self.rlan[ns - 1] * np.exp(self.sumbb[i + 107]) / (self.rlan[ns - 1]
+                                                                               * np.exp(self.sumbb[i + 107])
+                                                                               + self.rmu[ns - 1])
+                    r *= np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1])
+                                  + self.rmu[ni - 1]) * (self.t[ni] - ti))
+
+                    if ns - ni > 1:  # Line 1060 BCPT.cs
+                        MenarcheAge = ns - 1
+                        for j in range(ni + 1, MenarcheAge + 1):
+                            if self.t[j -1] >= np.float64(50.0):
+                                r *= np.exp(-(self.rlan[j - 1] * np.exp(self.sumbb[i + 107]) + self.rmu[j - 1])
+                                            * (self.t[j] - self.t[j - 1]))
+                            else:
+                                r *= np.exp(-(self.rlan[j - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[j - 1])
+                                            * (self.t[j] - self.t[j - 1]))
+                    self.abs[i - 1] += r
+                # Line 1081 BCPT.cs
+                else:  # close: if np.float64(ProjectionAge) > np.float64(50.0) and np.float64(CurrentAge) < 50
+                    '''
+                    /* calculate risk from */
+                    /* last age interval */
+                    /* ages do not stradle */
+                    '''
+                    r = np.float64(1.0) - np.exp(-(self.rlan[ns - 1] * np.exp(self.sumbb[i - 1])
+                                                   + self.rmu[ns - 1]) * (ts - self.t[ns - 1]))
+                    r = r * self.rlan[ns - 1] * np.exp(self.sumbb[i - 1]) / (self.rlan[ns - 1]
+                                                                             * np.exp(self.sumbb[i - 1])
+                                                                             + self.rmu[ns - 1])
+                    r *= np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[ni - 1])
+                                * (self.t[ni] - ti))
+                    if ns - ni > 1:
+                        MenarcheAge = ns - 1
+                        for j in range(ni + 1, MenarcheAge + 1):
+                            r *= np.exp(-(self.rlan[j - 1] * np.exp(self.sumbb[i -1]) + self.rmu[j - 1])
+                                        * (self.t[j] - self.t[j - 1]))
+                    self.abs[i - 1] += r
+
+            if ns - ni > 1: # Line 1106 BCPT.cs
+                if np.float64(ProjectionAge) > np.float64(50.0) and np.float64(CurrentAge) < np.float64(50.0):
+                    '''
+                    /* calculate risk from */
+                    /* intervening age int */
+                    '''
+                    MenarcheAge = ns -1
+                    for k in range(ni + 1, MenarcheAge + 1):
+                        if self.t[k - 1] >= np.float64(50.0):   # Line 1115 BCPT.cs
+                            r = 1.0 - np.exp(-(self.rlan[k - 1] * np.exp(self.sumbb[i + 107]) + self.rmu[k - 1])
+                                             * (self.t[k] - self.t[k - 1]))
+                            r = r * self.rlan[k - 1] * np.exp(self.sumbb[i + 107]) / (self.rlan[k - 1]
+                                                                                      * np.exp(self.sumbb[i + 107])
+                                                                                      + self.rmu[k - 1])
+                        else:   # Line 1124 BCPT.cs
+                            r = 1.0 - np.exp(-(self.rlan[k - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[k - 1])
+                                             * (self.t[k] - self.t[k - 1]))
+                            r = r * self.rlan[k - 1] * np.exp(self.sumbb[i - 1]) / (self.rlan[k - 1]
+                                                                                    * np.exp(self.sumbb[i - 1])
+                                                                                    + self.rmu[k - 1])
+
+                        r *= np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1])
+                                      + self.rmu[ni - 1]) * (self.t[ni] - ti))
+                        NumberOfBiopsy = k - 1
+                        for j in range(ni + 1, NumberOfBiopsy + 1): # Line 1136 BCPT.cs
+                            if self.t[j - 1] >= np.float64(50.0):
+                                r *= np.exp(-(self.rlan[j - 1] * np.exp(self.sumbb[i + 107])
+                                              + self.rmu[j - 1]) * (self.t[j] - self.t[j - 1]))
+                            else:
+                                r *= np.exp(-(self.rlan[j - 1] * np.exp(self.sumbb[i - 1])
+                                              + self.rmu[j - 1]) * (self.t[j] - self.t[j - 1]))
+                        # End for j in range...
+                        self.abs[i - 1] += r
+                else:   # Line 1154 BCPT.cs
+                    '''
+                    /* calculate risk from */
+                    /* intervening age int */
+                    '''
+                    MenarcheAge = ns - 1
+                    for k in range(ni + 1, MenarcheAge + 1):
+                        r = 1.0 - np.exp(-(self.rlan[k - 1] * np.exp(self.sumbb[i - 1])
+                                           + self.rmu[k - 1]) * (self.t[k] - self.t[k - 1]))
+                        r = r * self.rlan[k - 1] * np.exp(self.sumbb[i - 1]) / \
+                            (self.rlan[k - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[k - 1])
+                        r *= np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[ni - 1])
+                                    * (self.t[ni] - ti))
+                        NumberOfBiopsy = k - 1
+                        for j in range(ni + 1, NumberOfBiopsy + 1):
+                            r *= np.exp(-(self.rlan[j - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[j - 1])
+                                        * (self.t[j] - self.t[j - 1]))
+                        self.abs[i - 1] += r
+        # End of if ts <= self.t[ni]: else
+        ''' Line 1185 BCPT.cs
+        Leaving the following code out as 'abss' is only used for rounding the number to print to console
+        in the original code. TODO: SRMOORE should we put this back in?
+        abss = self.abs[i - 1] * np.float64(1000.0)
+        //HACK CHECK THIS (From original):
+        if (abss - (int)(abss) >= .5f)
+        {
+            //abss = d_int(abss) + 1.0 ;
+            abss = (int)(abss) + 1.0;
+        }
+        else
+        {
+            abss = (int)(abss);
+        }
+        abss /= 10.0;
+
+        It seems they are trying to round the number using .5 to decide if it should go up or down,
+            then deviding it by 10
+        '''
+        return self.abs[i - 1]  # End def CalculateRisk(...)
+
+    ''' The folowing code isn't needed unless we want to mimic BCPT.cs's printing to console:
+
+        public static void PrintArray(double[] o, string Name)
+        {
+            Console.WriteLine("------------------Contents of {0}", Name);
+            foreach (double d in o)
+            {
+                Console.WriteLine(string.Format("{0}", d.ToString("F5")));
+            }
+        }
+
+        public static void PrintArray2(double[,] o, string Name)
+        {
+            Console.WriteLine("------------------Contents of {0}", Name);
+            for (int i = 0; i <= o.GetUpperBound(0); ++i)
+            {
+                for (int j = 0; j <= o.GetUpperBound(1); ++j)
+                {
+                    Console.Write(string.Format("{0} ", o[i, j].ToString("F2")));
+                }
+                Console.WriteLine();
+            }
+        }
+    '''
