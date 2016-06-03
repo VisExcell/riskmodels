@@ -1061,16 +1061,16 @@ class GailRiskCalculator:
 if __name__ == '__main__':
     gailMod = GailRiskCalculator()
     gailMod.Initialize()
-    print gailMod.CalculateRisk(1,  # int    [1 = Abs, 2 = Ave]
-                  40,  # int    [t1]
-                  45,  # int    [t2]
-                  0,  # int    [i0]
-                  1,  # int    [i2]
-                  1,  # int    [i1]
-                  0,  # int    [i3]
-                  1,  # int    [iever]
-                  0,  # int    [i4]
+    print gailMod.CalculateRisk(1,  # riskIndex int    [1 = Abs, 2 = Ave]
+                  40,  # CurrentAge int    [t1]
+                  45,  # ProjectionAge int    [t2]
+                  0,  # AgeIndicator int    [i0]
+                  1,  # NumberOfBiopsy int    [i2]
+                  1,  # MenarcheAge int    [i1]
+                  1,  # FirstLiveBirthAge int    [i3]
+                  1,  # EverHaveBiopsy int    [iever]
+                  2,  # FirstDegRelatives int    [i4]
                   1,  # int    [ihyp]  HyperPlasia
                   np.float64(1.0),  # double [rhyp]  RHyperPlasia
-                  2  # int    [race]
+                  0  # irace int    [race]
                   )
