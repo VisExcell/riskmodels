@@ -4,7 +4,7 @@ class GailRiskCalculator:
     NumCovPattInGailModel = 216
 
     def __init__(self):
-        self.bet2 = np.zeros((8,3),dtype=np.float64)
+        self.bet2 = np.zeros((8,12),dtype=np.float64)
         self.bet = np.zeros(8,dtype=np.float64)
 
         self.rf = np.zeros(2,dtype=np.float64)
@@ -866,10 +866,10 @@ class GailRiskCalculator:
         # Line 985 BCPT.cs
         for i in range(1,109):
             # /* eliminate int */
-            self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0]
+            self.sumb[i - 1] = self.sumb[i - 1] - self.bet[0]
         for i in range(109,self.NumCovPattInGailModel+1):
             # /* eliminate intercept */
-            self.summb[i - 1] = self.sumb[i - 1] - self.bet[0] - self.bet[1]
+            self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0] - self.bet[1]
         # Line 995 BCPT.cs
         for j in range(1,7):
             # /* age specific baseline hazard */
@@ -878,15 +878,15 @@ class GailRiskCalculator:
             # /* age specific baseline hazard */
             self.rlan[j - 1] *= self.rf[1]
 
-        i = self.ilev
+        i = ilev  # Local Variable for function
         ''' /* index ilev of range 1- */
         /* setting i to covariate p */
         // HACK CHECK LOG VALUE
         Original: Line 1008
         sumbb[i - 1] += Math.Log(rhyp);'''
-        self.sumbb[i - 1] += np.log(self.rhyp)
+        self.sumbb[i - 1] += np.log(rhyp)
         if i <= 108:
-            self.sumbb[i + 107] += np.log(self.rhyp)
+            self.sumbb[i + 107] += np.log(rhyp)
 
         if ts <= self.t[ni]:
             '''
@@ -1057,3 +1057,20 @@ class GailRiskCalculator:
             }
         }
     '''
+
+if __name__ == '__main__':
+    gailMod = GailRiskCalculator()
+    gailMod.Initialize()
+    print gailMod.CalculateRisk(1,  # int    [1 = Abs, 2 = Ave]
+                  40,  # int    [t1]
+                  45,  # int    [t2]
+                  0,  # int    [i0]
+                  1,  # int    [i2]
+                  1,  # int    [i1]
+                  0,  # int    [i3]
+                  1,  # int    [iever]
+                  0,  # int    [i4]
+                  1,  # int    [ihyp]  HyperPlasia
+                  np.float64(1.0),  # double [rhyp]  RHyperPlasia
+                  2  # int    [race]
+                  )
