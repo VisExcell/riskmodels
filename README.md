@@ -57,3 +57,22 @@ Inputs to this model:
 	- Unknown
 	- No
 	- Yes
+
+--
+Notes about indicators from withing original C# Calculate Risk:
+
+	/* AgeIndicator: age ge 50 ind  0=[20, 50) */
+	/*                    1=[50, 85) */
+	/* MenarcheAge: age menarchy   0=[14, 39] U 99 (unknown) */
+	/*                    1=[12, 14) */
+	/*                    2=[ 7, 12) */
+	/* NumberOfBiopsy: # biopsy       0=0 or (99 and ever had biopsy=99 */
+	/*                    1=1 or (99 and ever had biopsy=1 y */
+	/*                    2=[ 2, 30] */
+	/* FirstLiveBirthAge: age 1st live   0=<20, 99 (unknown) */
+	/*                    1=[20, 25) */
+	/*                    2=[25, 30) U 0 */
+	/*                    3=[30, 55] */
+	/* FirstDegRelatives: 1st degree rel 0=0, 99 (unknown) */
+	/*                    1=1 */
+	/*                    2=[2, 31] */

@@ -909,7 +909,7 @@ class GailRiskCalculator:
             '''
             self.abs[i - 1] = 1.0 - np.exp(-(self.rlan[ni - 1] * np.exp(self.sumbb[i - 1])
                                              + self.rmu[ni - 1]) * (self.t[ni] - ti))
-            self.bs[i - 1] = self.abs[i - 1] * self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) \
+            self.abs[i - 1] = self.abs[i - 1] * self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) \
                              / (self.rlan[ni - 1] * np.exp(self.sumbb[i - 1]) + self.rmu[ni - 1])  # /* age in */
             ''' /* risk f */'''
             if ns - ni > 0:
@@ -1061,16 +1061,16 @@ class GailRiskCalculator:
 if __name__ == '__main__':
     gailMod = GailRiskCalculator()
     gailMod.Initialize()
-    print gailMod.CalculateRisk(1,  # riskIndex int    [1 = Abs, 2 = Ave]
-                  40,  # CurrentAge int    [t1]
-                  45,  # ProjectionAge int    [t2]
-                  0,  # AgeIndicator int    [i0]
-                  1,  # NumberOfBiopsy int    [i2]
-                  1,  # MenarcheAge int    [i1]
-                  1,  # FirstLiveBirthAge int    [i3]
+    print gailMod.CalculateRisk(2,  # riskIndex int    [1 = Abs, 2 = Ave]
+                  51,  # CurrentAge int    [t1]
+                  90,  # ProjectionAge int    [t2]
+                  1,  # AgeIndicator int    [i0]
+                  2,  # NumberOfBiopsy int    [i2]
+                  2,  # MenarcheAge int    [i1]
+                  3,  # FirstLiveBirthAge int    [i3]
                   1,  # EverHaveBiopsy int    [iever]
                   2,  # FirstDegRelatives int    [i4]
                   1,  # int    [ihyp]  HyperPlasia
-                  np.float64(1.0),  # double [rhyp]  RHyperPlasia
-                  0  # irace int    [race]
+                  np.float64(1.82),  # double [rhyp]  RHyperPlasia
+                  1  # irace int    [race]
                   )
