@@ -72,9 +72,9 @@ def main():
 
     ''' any of the biopsies with Hyper Plasia?'''
     # These don't actually get used, so I'll just set it to something below.
-    #ihyperplasiaVals = [99,  # unknown
-    #                   0,   # No
-    #                   1]   # yes
+    ihyperplasiaVals = [1,  # yes
+                       0,   # No
+                       99]   # unknown or never had biopsy
 
 
 
@@ -93,6 +93,7 @@ def main():
         outputwriter = csv.writer(outputfile)
         '''Loop through values'''
         for irace in raceValues:
+            print "Starting irace: " + str(irace)
             for age in ageValues:
                 if age > 49 :
                     ageInd = 1
@@ -104,6 +105,7 @@ def main():
                             # Biopsy values depend on yes/no on ever had biopsy question.
                             currentRowBase = [irace,age,menarch,livebirthage,numrelatives]
                             # No Biopsy (or unknown)
+                            # full row would be rowbase + [(5)number of biopsies, (6)ever had  biopsy, (7)ihyp, (8)rhyp]
                             currentRow = currentRowBase + [0, 0, 0, np.float64(1.0)]
                             fiveYearRiskAbs = gailModel.CalculateAbsoluteRisk(currentRow[1],
                                                                               currentRow[1] + 5,
@@ -152,8 +154,9 @@ def main():
                             currentRow = currentRow + [fiveYearRiskAbs,fiveYearRiskAve,lifetimeRiskAbs,lifetimeRiskAve]
                             outputwriter.writerow(currentRow)
                             for numbiopsy in numBiopsyVals:
-                                for rhyp in rhypValues:
-                                    currentRow = currentRowBase + [1,1,numbiopsy,rhyp]
+                                for hyp in range(0,3): #rhypValues:
+                                    # full row would be rowbase + [(5)number of biopsies, (6)ever had  biopsy, (7)ihyp, (8)rhyp]
+                                    currentRow = currentRowBase + [numbiopsy,1,ihyperplasiaVals[hyp],rhypValues[hyp]]
                                     fiveYearRiskAbs = gailModel.CalculateAbsoluteRisk(currentRow[1],
                                                                                       currentRow[1] + 5,
                                                                                       ageInd,
