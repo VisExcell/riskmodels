@@ -81,7 +81,6 @@ This is the integer value for hyperplasia, but we don't actually use it
 
 From the web site:
 
-    <option value="999">Select</option>
     <option value="99">Unknown</option>
     <option value="1">Yes</option>
     <option value="0">No</option>
