@@ -691,6 +691,20 @@ class GailRiskCalculator:
                       rhyp,                 # double [rhyp]  RHyperPlasia
                       irace                 # int    [race]
                     ):
+        
+        # print "CalculateRisk: riskindex: %d" % riskindex
+        # print "CalculateRisk: CurrentAge: %d" % CurrentAge
+        # print "CalculateRisk: ProjectionAge: %d" % ProjectionAge
+        # print "CalculateRisk: AgeIndicator: %d" % AgeIndicator
+        # print "CalculateRisk: NumberOfBiopsy: %d" % NumberOfBiopsy
+        # print "CalculateRisk: MenarcheAge: %d" % MenarcheAge
+        # print "CalculateRisk: FirstLiveBirthAge: %d" % FirstLiveBirthAge
+        # print "CalculateRisk: EverHadBiopsy: %d" % EverHadBiopsy
+        # print "CalculateRisk: FirstDegRelatives: %d" % FirstDegRelatives
+        # print "CalculateRisk: ihyp: %d" % ihyp
+        # print "CalculateRisk: rhyp: %f" % rhyp
+        # print "CalculateRisk: irace: %d" % irace
+
         # Local Variables
         retval = np.float64(0.0)
         # i = 0  # SRMOORE: no initalizer needed as we use in for loops and such.
