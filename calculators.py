@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from flask import abort
 from gail import gail
 import numpy as np
+import datetime
+from RiskAssessment import BasicRiskAssessment as assessment
 
 app = Flask(__name__)
 
@@ -27,21 +29,22 @@ def doGailCalc():
     if not request.json: # TODO add more validation
         abort(400)
     else:
-        print request.json
+        # print request.json
         calc = gail.GailRiskCalculator()
         calc.Initialize()  # TODO: look into moving this into the instantion of the object
 
         # TODO: move the rhyp and age indicator logic into the gail calculator, all it's logic should live in there.
-        ageIndicator = 0 if request.json['age'] < 50 else 1
+        age_indicator = 0 if request.json['age'] < 50 else 1
         rhyp = np.float64(1.0)
         if request.json['ever_had_biopsy'] == 1:
             if request.json['ihyp'] == 0:
                 rhyp = np.float64(0.93)
             elif request.json['ihyp'] == 1:
                 rhyp = np.float(1.82)
+
         fiveYearABS = calc.CalculateAbsoluteRisk(request.json['age'],
                                                  request.json['age'] + 5,
-                                                 ageIndicator,
+                                                 age_indicator,
                                                  request.json['num_biopsy'],
                                                  request.json['menarch_age'],
                                                  request.json['live_birth_age'],
@@ -52,7 +55,7 @@ def doGailCalc():
                                                  request.json['race'])
         fiveYearAVE = calc.CalculateAeverageRisk(request.json['age'],
                                                  request.json['age'] + 5,
-                                                 ageIndicator,
+                                                 age_indicator,
                                                  request.json['num_biopsy'],
                                                  request.json['menarch_age'],
                                                  request.json['live_birth_age'],
@@ -63,7 +66,7 @@ def doGailCalc():
                                                  request.json['race'])
         lifetimeABS = calc.CalculateAbsoluteRisk(request.json['age'],
                                                  90,
-                                                 ageIndicator,
+                                                 age_indicator,
                                                  request.json['num_biopsy'],
                                                  request.json['menarch_age'],
                                                  request.json['live_birth_age'],
@@ -74,7 +77,7 @@ def doGailCalc():
                                                  request.json['race'])
         lifetimeAve = calc.CalculateAeverageRisk(request.json['age'],
                                                  90,
-                                                 ageIndicator,
+                                                 age_indicator,
                                                  request.json['num_biopsy'],
                                                  request.json['menarch_age'],
                                                  request.json['live_birth_age'],
@@ -84,9 +87,11 @@ def doGailCalc():
                                                  rhyp,
                                                  request.json['race'])
 
-        return jsonify({'results': {'fiveABS': fiveYearABS, 'fiveAVE': fiveYearAVE,
-                                    'lifeABS': lifetimeABS, 'lifeAVE': lifetimeAve}})
+        results = assessment()
+        results.setRiskScores(fiveYearABS,fiveYearAVE,lifetimeABS,lifetimeAve)
+
+        return jsonify(results.getJson())
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

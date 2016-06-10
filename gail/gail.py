@@ -691,7 +691,7 @@ class GailRiskCalculator:
                       rhyp,                 # double [rhyp]  RHyperPlasia
                       irace                 # int    [race]
                     ):
-        
+
         # print "CalculateRisk: riskindex: %d" % riskindex
         # print "CalculateRisk: CurrentAge: %d" % CurrentAge
         # print "CalculateRisk: ProjectionAge: %d" % ProjectionAge
