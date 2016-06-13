@@ -13,16 +13,17 @@ from bs4 import BeautifulSoup
 # todo auto compare the values, which requires working through rounding in python and/or sql
 
 
-def writeCancerGovScoretoDB():
+def writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                            biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                            fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE):
 
-    # variables below scraped from cancer.gov site through beautiful soup
     cgvfiveyearRiskABS = -1.1
     cgvfiveyearRiskAVE = -1.1
     cgvLifetimeRiskABS = -1.1
     cgvLifetimeRiskAVE = -1.1
 
-    url = serviceurl + urllib.urlencode({"genetics":genetics, "current_age":current_age ,"age_at_menarche":wage_at_menarche,
-                                         "age_at_first_live_birth":wage_at_first_live_birth,"ever_had_biopsy":wever_had_biopsy,
+    url = serviceurl + urllib.urlencode({"genetics":genetics, "current_age":current_age ,"age_at_menarche":age_at_menarche,
+                                         "age_at_first_live_birth":age_at_first_live_birth,"ever_had_biopsy":ever_had_biopsy,
                                          "previous_biopsies":previous_biopsies,"biopsy_with_hyperplasia":biopsy_with_hyperplasia,
                                          "related_with_breast_cancer":related_with_breast_cancer,
                                          "race":race})
@@ -31,7 +32,6 @@ def writeCancerGovScoretoDB():
     #logging.debug('Retrieving: %s' ), url
 
     myhtml = urllib.urlopen(url,context=scontext).read()
-
     soup = BeautifulSoup(myhtml, "lxml")
 
     tags = soup('span', {'id': 'ctl00_cphMain_lbl5YrAbsoluteRisk'})
@@ -46,14 +46,11 @@ def writeCancerGovScoretoDB():
     tags = soup('span', {'id': 'ctl00_cphMain_lblLifeTimeAverageRisk90'})
     for x in tags: cgvLifetimeRiskAVE= (float(x.get_text()[:-1])/100)
 
-    print 'count ', count, ':',fiveyearRiskABS, ':',cgvfiveyearRiskABS, ':', LifetimeRiskABS, ':',cgvLifetimeRiskABS
-    print url
-
-    cur.execute('''INSERT INTO GailTestCases (csvlinenum,genetics,current_age,age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+    cur.execute('''INSERT INTO GailTestCases (genetics,current_age,age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
     biopsy_with_hyperplasia,floatbiopsy_with_hyperplasia,related_with_breast_cancer,race,
     fiveYearRiskABS,fiveYearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE,
-    cgvfiveyearRiskABS,cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
-                (count,genetics,current_age,age_at_menarche,age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+    cgvfiveyearRiskABS,cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                (genetics,current_age,age_at_menarche,age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
                  biopsy_with_hyperplasia,floatbiopsy_with_hyperplasia,related_with_breast_cancer,race,
                  fiveyearRiskABS,fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE,
                  cgvfiveyearRiskABS, cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE))
@@ -73,10 +70,10 @@ scontext = None
 conn = sqlite3.connect('GailServiceTestDB.sqlite')
 cur = conn.cursor()
 
-cur.execute('''DROP TABLE IF EXISTS GailTestCases''')
+cur.execute('''DROP TABLE GailTestCases''')
 
 cur.execute('''CREATE TABLE IF NOT EXISTS GailTestCases
-(csvlinenum,genetics,current_age,age_at_menarche, age_at_first_live_birth, ever_had_biopsy,
+(genetics,current_age,age_at_menarche, age_at_first_live_birth, ever_had_biopsy,
 previous_biopsies,biopsy_with_hyperplasia,floatbiopsy_with_hyperplasia,
 related_with_breast_cancer,race,fiveYearRiskABS,fiveYearRiskAVE,lifetimeRiskABS,lifetimeRiskAVE,
 cgvfiveyearRiskABS, cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE )''')
@@ -95,25 +92,20 @@ for line in fh:
     csvrow = case.split(",")
 
     genetics = 0 # not set in test data
-    current_age = int(csvrow[1])
-    age_at_menarche = int(csvrow[2])
-    wage_at_menarche = age_at_menarche
-
-    age_at_first_live_birth = int(csvrow[3])
-    wage_at_first_live_birth = age_at_first_live_birth
-
-    ever_had_biopsy = int(csvrow[6])
-    wever_had_biopsy = ever_had_biopsy
-
-    previous_biopsies = int(csvrow[5])
-    biopsy_with_hyperplasia = int(csvrow[7]) #ihyp in the test data csv
-    floatbiopsy_with_hyperplasia = float(csvrow[8]) #rhyp in the test data csv
-    related_with_breast_cancer = int(csvrow[4])
-    race = int(csvrow[0])
-    fiveyearRiskABS = float(csvrow[9])
-    fiveyearRiskAVE = float(csvrow[10])
-    LifetimeRiskABS = float(csvrow[11])
-    LifetimeRiskAVE = float(csvrow[12])
+    current_age = csvrow[1]
+    age_at_menarche = csvrow[2]
+    age_at_first_live_birth = csvrow[3]
+    ever_had_biopsy = csvrow[6]
+    previous_biopsies = csvrow[5]
+    biopsy_with_hyperplasia = csvrow[7] #ihyp in the test data csv
+    floatbiopsy_with_hyperplasia = csvrow[8] #rhyp in the test data csv
+    related_with_breast_cancer = csvrow[4]
+    race = csvrow[0]
+    fiveyearRiskABS = csvrow[9]
+    fiveyearRiskAVE = csvrow[10]
+    LifetimeRiskABS = csvrow[11]
+    LifetimeRiskAVE = csvrow[12]
+    # below scraped from cancer.gov site through beautiful soup
 
 
 
@@ -126,65 +118,72 @@ for line in fh:
     try:
         data = cur.fetchone()[0]
         print "Duplicate Test Case Found in database ",current_age
-        #logging.debug("Duplicate Test Case Found in database %s", current_age)
+        logging.debug("Duplicate Test Case Found in database %s", current_age)
         continue
     except:
         pass
 
     # encoding to the URL params for the cancer.gov site for age at menarch, live birth, and ever had a biopsy
-    if age_at_menarche == 0:
-        wage_at_menarche = 14
-    elif age_at_menarche == 1:
-        wage_at_menarche = 13
-    elif age_at_menarche == 2:
-        wage_at_menarche = 10
+    if age_at_menarche == 0 :age_at_menarche = 14
+    elif age_at_menarche == 1: age_at_menarche = 13
+    elif age_at_menarche == 2: age_at_menarche = 10
 
     if age_at_first_live_birth == 3 :
-        wage_at_first_live_birth = 30
+        age_at_first_live_birth = 30
+
     elif age_at_first_live_birth == 1 :
-        wage_at_first_live_birth = 22
+        age_at_first_live_birth = 22
     elif age_at_first_live_birth == 0 :
         # encode once at 15
-        wage_at_first_live_birth = 15
+        age_at_first_live_birth = 15 :
+
     elif age_at_first_live_birth == 2 :
         # encode once at 27
-        wage_at_first_live_birth = 27
+        age_at_first_live_birth = 27 :
 
     # Write to DB
-    writeCancerGovScoretoDB()
+    writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                        biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                        fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE)
 
     if ever_had_biopsy == 0:
         # encode ever_had_biopsy again at 99
-        wever_had_biopsy = 99
+        ever_had_biopsy = 99
         #Write to DB
-        writeCancerGovScoretoDB()
+        writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                        biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                        fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE)
+        ever_had_biopsy = 0
 
-    if age_at_first_live_birth == 0:
+    if age_at_first_live_birth == 15:
         # enclode age_at_first_live_birth again at 99
-        wage_at_first_live_birth = 99
+        age_at_first_live_birth = 99
         #write to DB
-        writeCancerGovScoretoDB()
-
-
+        writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                        biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                        fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE)
         if ever_had_biopsy == 0:
             # encode ever_had_biopsy again at 99
-            wever_had_biopsy = 99
-            #write to DB
-            writeCancerGovScoretoDB()
-
-
-
-    if age_at_first_live_birth == 2:
+            ever_had_biopsy = 99
+        #write to DB
+        writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                        biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                        fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE)
+    if age_at_first_live_birth == 27:
         # enclode age_at_first_live_birth again at 0
-        wage_at_first_live_birth = 0
+        age_at_first_live_birth = 0
         #write to DB
-        writeCancerGovScoretoDB()
-
+        writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                        biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                        fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE)
         if ever_had_biopsy == 0:
             # encode ever_had_biopsy again at 99
-            wever_had_biopsy = 99
-            #write to DB
-            writeCancerGovScoretoDB()
+            ever_had_biopsy = 99
+        #write to DB
+        writeCancerGovScoretoDB(genetics, age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
+                        biopsy_with_hyperplasia,related_with_breast_cancer, race, floatbiopsy_with_hyperplasia,fiveyearRiskABS,
+                        fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE)
+
 
     if (count % 500 == 0):
         print 'Processed:', count, 'csv rows at', time.strftime("%H:%M:%S")

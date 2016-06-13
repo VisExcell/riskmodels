@@ -39,15 +39,25 @@ Race is one of:
 
 Current age is an integer between 35 and 85 (inclusive)
 
-#### Menarche Age
+#### Menarche Age*
 
 Menarche age is one of the following values:
 
     2: ages 7 to 11
     1: ages 12 and 13
-    0: ages 14 and up (to 39) or Unknown (frequently signified by 99)
+    0: ages 14 and up (to 39) or 
+    99: Unknown
+    
+    ----
+    Cancer.gov values:
+    10: ages 7 to 11
+    13: ages 12 and 13
+    14: ages 14 and up
+    99: Unknown
 
-#### First Live Birth Age
+    
+
+#### First Live Birth Age*
 
 Patient age at first live birth is one of the following:
 
@@ -55,6 +65,16 @@ Patient age at first live birth is one of the following:
     1: 20 to 24 years old
     2: 25 to 29 years old, or *No Birth*
     3: 30 to 55 years old
+    
+    ----
+    Cancer.gov values:
+    99: unknown
+    0: no live births
+    15: less than 20
+    22: 20 to 24 years old
+    27: 25 to 29 years old
+    30: 30 to 55 years old
+    
 
 #### First Deg Relatives
 
@@ -70,11 +90,18 @@ These are the number of first degree relatives that have had breast cancer
     1: One or Unknown number of biopsies (But have had biopsy below)
     2: more than one biopsy
 
-#### Ever Had Biopsy
+#### Ever Had Biopsy*
 
     0:  No or Unknown
     1: Yes
-
+    -----
+    Cancer.gov values:
+    99: unknown
+    0: no live births
+    1: yes
+    
+    cancer.gov also sets 99 unknown as the value for biopsy with hyperplasia if ever had a biopsy is set to unknown
+    
 #### ihyp
 
 This is the integer value for hyperplasia, but we don't actually use it
