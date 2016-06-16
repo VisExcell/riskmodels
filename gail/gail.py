@@ -707,13 +707,14 @@ class GailRiskCalculator:
 
         # Local Variables
         retval = np.float64(0.0)
-        # i = 0  # SRMOORE: no initalizer needed as we use in for loops and such.
+
+        i = 0  # SRMOORE: no initalizer needed as we use in for loops and such.
         j = 0
         k = 0
         n = 0
         r = np.float64(0.0)
         ni = 0
-        # ti = np.float64(0.0)
+        ti = np.float64(0.0)
         ns = 0
         ts = np.float64(0.0)
         abss = np.float64(0.0)
@@ -756,7 +757,7 @@ class GailRiskCalculator:
                 # //!!!TODO CHECK THE INDEX (From original)
                 ns = i - 1
                 break
-        incr = 0    # TODO SRMOORE: Not needed?
+        incr = 0
         if riskindex == 2 and irace < 7:
             # //HACK CHECK THIS  (From original Line 843 )
             incr = 3
@@ -880,7 +881,7 @@ class GailRiskCalculator:
         # Line 985 BCPT.cs
         for i in range(1,109):
             # /* eliminate int */
-            self.sumb[i - 1] = self.sumb[i - 1] - self.bet[0]
+            self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0]
         for i in range(109,self.NumCovPattInGailModel+1):
             # /* eliminate intercept */
             self.sumbb[i - 1] = self.sumb[i - 1] - self.bet[0] - self.bet[1]
@@ -1075,15 +1076,15 @@ class GailRiskCalculator:
 if __name__ == '__main__':
     gailMod = GailRiskCalculator()
     gailMod.Initialize()
-    print gailMod.CalculateRisk(2,  # riskIndex int    [1 = Abs, 2 = Ave]
-                  51,  # CurrentAge int    [t1]
-                  90,  # ProjectionAge int    [t2]
-                  1,  # AgeIndicator int    [i0]
-                  2,  # NumberOfBiopsy int    [i2]
+    print gailMod.CalculateRisk(1,  # riskIndex int    [1 = Abs, 2 = Ave]
+                  35,  # CurrentAge int    [t1]
+                  40,  # ProjectionAge int    [t2]
+                  0,  # AgeIndicator int    [i0]
+                  1,  # NumberOfBiopsy int    [i2]
                   2,  # MenarcheAge int    [i1]
-                  3,  # FirstLiveBirthAge int    [i3]
+                  0,  # FirstLiveBirthAge int    [i3]
                   1,  # EverHaveBiopsy int    [iever]
-                  2,  # FirstDegRelatives int    [i4]
+                  0,  # FirstDegRelatives int    [i4]
                   1,  # int    [ihyp]  HyperPlasia
                   np.float64(1.82),  # double [rhyp]  RHyperPlasia
                   1  # irace int    [race]
