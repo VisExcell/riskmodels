@@ -68,12 +68,14 @@ Patient age at first live birth is one of the following:
     
     ----
     Cancer.gov values:
-    99: unknown
-    0: no live births
+
     15: less than 20
     22: 20 to 24 years old
     27: 25 to 29 years old
     30: 30 to 55 years old
+    
+    99: unknown
+    0: no live births
     
 
 #### First Deg Relatives

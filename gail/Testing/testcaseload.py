@@ -21,6 +21,8 @@ def writeCancerGovScoretoDB():
     cgvLifetimeRiskABS = -1.1
     cgvLifetimeRiskAVE = -1.1
 
+    explainer= ""
+
     url = serviceurl + urllib.urlencode({"genetics":genetics, "current_age":current_age ,"age_at_menarche":wage_at_menarche,
                                          "age_at_first_live_birth":wage_at_first_live_birth,"ever_had_biopsy":wever_had_biopsy,
                                          "previous_biopsies":previous_biopsies,"biopsy_with_hyperplasia":biopsy_with_hyperplasia,
@@ -29,10 +31,14 @@ def writeCancerGovScoretoDB():
 
 
     #logging.debug('Retrieving: %s' ), url
-
+    time.sleep(0.1) #delays for 1 seconds
     myhtml = urllib.urlopen(url,context=scontext).read()
 
     soup = BeautifulSoup(myhtml, "lxml")
+
+    tags = soup.find_all('p')
+    explainer = explainer + str(tags[7])+str(tags[8])
+
 
     tags = soup('span', {'id': 'ctl00_cphMain_lbl5YrAbsoluteRisk'})
     for x in tags: cgvfiveyearRiskABS= (float(x.get_text()[:-1])/100)
@@ -46,17 +52,17 @@ def writeCancerGovScoretoDB():
     tags = soup('span', {'id': 'ctl00_cphMain_lblLifeTimeAverageRisk90'})
     for x in tags: cgvLifetimeRiskAVE= (float(x.get_text()[:-1])/100)
 
-    print 'count ', count, ':',fiveyearRiskABS, ':',cgvfiveyearRiskABS, ':', LifetimeRiskABS, ':',cgvLifetimeRiskABS
-    print url
+    #print 'count ', count, ':',fiveyearRiskABS, ':',cgvfiveyearRiskABS, ':', LifetimeRiskABS, ':',cgvLifetimeRiskABS
+    #print url
 
     cur.execute('''INSERT INTO GailTestCases (csvlinenum,genetics,current_age,age_at_menarche, age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
     biopsy_with_hyperplasia,floatbiopsy_with_hyperplasia,related_with_breast_cancer,race,
     fiveYearRiskABS,fiveYearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE,
-    cgvfiveyearRiskABS,cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+    cgvfiveyearRiskABS,cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE,explainer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
                 (count,genetics,current_age,age_at_menarche,age_at_first_live_birth, ever_had_biopsy,previous_biopsies,
                  biopsy_with_hyperplasia,floatbiopsy_with_hyperplasia,related_with_breast_cancer,race,
                  fiveyearRiskABS,fiveyearRiskAVE,LifetimeRiskABS,LifetimeRiskAVE,
-                 cgvfiveyearRiskABS, cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE))
+                 cgvfiveyearRiskABS, cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE,explainer))
 
     conn.commit()
 
@@ -73,13 +79,13 @@ scontext = None
 conn = sqlite3.connect('GailServiceTestDB.sqlite')
 cur = conn.cursor()
 
-cur.execute('''DROP TABLE IF EXISTS GailTestCases''')
+#cur.execute('''DROP TABLE IF EXISTS GailTestCases''')
 
 cur.execute('''CREATE TABLE IF NOT EXISTS GailTestCases
 (csvlinenum,genetics,current_age,age_at_menarche, age_at_first_live_birth, ever_had_biopsy,
 previous_biopsies,biopsy_with_hyperplasia,floatbiopsy_with_hyperplasia,
 related_with_breast_cancer,race,fiveYearRiskABS,fiveYearRiskAVE,lifetimeRiskABS,lifetimeRiskAVE,
-cgvfiveyearRiskABS, cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE )''')
+cgvfiveyearRiskABS, cgvfiveyearRiskAVE,cgvLifetimeRiskABS,cgvLifetimeRiskAVE,explainer )''')
 
 print 'Please check results in the database:  GailServiceTestDB.sqlite'
 print 'Starting run at: ', time.strftime("%H:%M:%S")
@@ -88,8 +94,10 @@ fh = open("gailTestOutput.csv")
 
 count = 0
 for line in fh:
-    if count > 10000 : break
-
+    #Update this to start from Scratch
+    if count < 83500 :
+        count += 1
+        continue
 
     case = line.strip()
     csvrow = case.split(",")
@@ -125,13 +133,14 @@ for line in fh:
 
     try:
         data = cur.fetchone()[0]
-        print "Duplicate Test Case Found in database ",current_age
+        #print "Duplicate Test Case Found in database ",current_age
         #logging.debug("Duplicate Test Case Found in database %s", current_age)
         continue
     except:
         pass
 
     # encoding to the URL params for the cancer.gov site for age at menarch, live birth, and ever had a biopsy
+
     if age_at_menarche == 0:
         wage_at_menarche = 14
     elif age_at_menarche == 1:
@@ -186,8 +195,10 @@ for line in fh:
             #write to DB
             writeCancerGovScoretoDB()
 
+
+
     if (count % 500 == 0):
         print 'Processed:', count, 'csv rows at', time.strftime("%H:%M:%S")
-        time.sleep(120) #delays for 2 minutes
+        time.sleep(10) #delays for 10 seconds
 print 'Processed ', count, 'lines'
 
