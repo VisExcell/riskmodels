@@ -31,7 +31,7 @@ and RES.race = UGTC.race
 select UGTC.csvlinenum, UGTC.fiveyearriskabs,RES.cgvfiveyearriskabs, UGTC.fiveyearriskave, RES.cgvfiveyearriskave, UGTC.lifetimeriskabs, RES.cgvlifetimeriskabs, UGTC.lifetimeriskave, RES.cgvlifetimeriskave
 from gailresults as RES, UpdatedGailTestCases as UGTC
  
-where round(UGTC.lifetimeriskabs,3) <> round(RES.lifetimeriskabs,3)
+where round(UGTC.lifetimeriskabs,3) <> round(RES.cgvlifetimeriskabs,3)
 and RES.csvlinenum = UGTC.csvlinenum and RES.current_age = UGTC.current_age and RES.age_at_menarche = UGTC.age_at_menarche 
 and RES.age_at_first_live_birth = UGTC. age_at_first_live_birth and  RES.ever_had_biopsy = UGTC.ever_had_biopsy and RES.previous_biopsies = UGTC.previous_biopsies
 and RES.biopsy_with_hyperplasia = UGTC.biopsy_with_hyperplasia and RES.floatbiopsy_with_hyperplasia = UGTC.floatbiopsy_with_hyperplasia 
@@ -44,7 +44,7 @@ and RES.race = UGTC.race
 select UGTC.csvlinenum, UGTC.fiveyearriskabs,RES.cgvfiveyearriskabs, UGTC.fiveyearriskave, RES.cgvfiveyearriskave, UGTC.lifetimeriskabs, RES.cgvlifetimeriskabs, UGTC.lifetimeriskave, RES.cgvlifetimeriskave
 from gailresults as RES, UpdatedGailTestCases as UGTC
 
-where round(UGTC.lifetimeriskave,3) <> round(RES.lifetimeriskave,3)
+where round(UGTC.lifetimeriskave,3) <> round(RES.cgvlifetimeriskave,3)
 and RES.csvlinenum = UGTC.csvlinenum and RES.current_age = UGTC.current_age and RES.age_at_menarche = UGTC.age_at_menarche 
 and RES.age_at_first_live_birth = UGTC. age_at_first_live_birth and  RES.ever_had_biopsy = UGTC.ever_had_biopsy and RES.previous_biopsies = UGTC.previous_biopsies
 and RES.biopsy_with_hyperplasia = UGTC.biopsy_with_hyperplasia and RES.floatbiopsy_with_hyperplasia = UGTC.floatbiopsy_with_hyperplasia 
