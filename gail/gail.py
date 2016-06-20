@@ -647,9 +647,11 @@ class GailRiskCalculator:
                       rhyp,                 # double [rhyp]  RHyperPlasia
                       irace                 # int    [race]
                     ):
-        return self.CalculateRisk(1, CurrentAge, ProjectionAge, AgeIndicator,
-                                  NumberOfBiopsy, MenarcheAge, FirstLiveBirthAge, EverHadBiopsy,
-                                  FirstDegRelatives, ihyp, rhyp, irace)
+        # return self.CalculateRisk(1, CurrentAge, ProjectionAge, AgeIndicator,
+        #                          NumberOfBiopsy, MenarcheAge, FirstLiveBirthAge, EverHadBiopsy,
+        #                          FirstDegRelatives, ihyp, rhyp, irace)
+        return self.CalculateRiskAPI(1, CurrentAge, ProjectionAge, MenarcheAge, FirstLiveBirthAge, FirstDegRelatives,
+                                     EverHadBiopsy, NumberOfBiopsy, ihyp, irace)
 
     '''
     Line 727 BCPT.cs
@@ -669,9 +671,82 @@ class GailRiskCalculator:
                       rhyp,                 # double [rhyp]  RHyperPlasia
                       irace                 # int    [race]
                     ):
-        return self.CalculateRisk(2, CurrentAge, ProjectionAge, AgeIndicator,
-                                  NumberOfBiopsy, MenarcheAge, FirstLiveBirthAge, EverHadBiopsy,
-                                  FirstDegRelatives, ihyp, rhyp, irace)
+        # return self.CalculateRisk(2, CurrentAge, ProjectionAge, AgeIndicator,
+        #                          NumberOfBiopsy, MenarcheAge, FirstLiveBirthAge, EverHadBiopsy,
+        #                          FirstDegRelatives, ihyp, rhyp, irace)
+        return self.CalculateRiskAPI(2, CurrentAge, ProjectionAge, MenarcheAge, FirstLiveBirthAge, FirstDegRelatives,
+                                     EverHadBiopsy,NumberOfBiopsy,ihyp,irace)
+
+    ''' New API calculate risk entry point '''
+    def CalculateRiskAPI(self,
+                         riskindex,
+                         CurrentAge,
+                         ProjectionAge,
+                         MenarcheAge,
+                         FirstLiveBirthAge,
+                         FirstDegRelatives,
+                         everhadbiopsy=99,    # 99: unknown, 1: yes, 0: no
+                         NumberOfBiopsy=99,    # 0: no, 1: One, or unknown buy have had biopsy, 2: more than one
+                         hyperplasia=99,  # [ 1: yes, 0: no, 99: Unknown or never had biopsy
+                         race=1):
+
+        # 50 and over?
+        ageindicator = 0
+        if CurrentAge >= 50:
+            ageindicator = 1
+
+        # Clean up biopsy inputs
+
+        if everhadbiopsy == 0:
+            NumberOfBiopsy = 0
+            hyperplasia = 99
+
+        if everhadbiopsy == 99:
+            NumberOfBiopsy = 99
+        elif NumberOfBiopsy == 0 or (everhadbiopsy == 99 and NumberOfBiopsy == 99):
+            NumberOfBiopsy = 0
+        elif NumberOfBiopsy == 1 or (everhadbiopsy == 1 and NumberOfBiopsy == 99):
+            NumberOfBiopsy = 1
+        elif 1 < NumberOfBiopsy <= 30:
+            NumberOfBiopsy = 2
+        else:
+            NumberOfBiopsy = 0  # Inputs are out of bounds... or everhadbiopsy == 0
+
+
+        realHyp = np.float64(1.0)   # Zero Biopsy or Unknown
+        if hyperplasia == 1:
+            realHyp = np.float64(1.82)  # Yes to hyperplasia
+        elif hyperplasia == 0:
+            realHyp = np.float64(0.93)  # No to hyperplasia but yes to biopsy
+
+        # level set everhadbiopsy (99 -> 0)
+        if everhadbiopsy == 99:
+            everhadbiopsy = 0
+
+        # Clean up first deg relatives for race values
+        if FirstDegRelatives == 0 or FirstDegRelatives == 99:
+           FirstDegRelatives = 0
+        elif 2 <= FirstDegRelatives <= 31 and race < 7:
+            FirstDegRelatives = 2
+        elif FirstDegRelatives >= 2 and race >= 7:
+            FirstDegRelatives = 1
+
+        # clean up First Live Birth age
+
+        #newlivebirth = 0
+        #if FirstLiveBirthAge == 0:
+        #    newlivebirth = 2
+        #elif FirstLiveBirthAge > 0
+        #    if FirstLiveBirthAge < 20 or FirstLiveBirthAge == 99:
+        #        newlivebirth = 0
+        #    elif 20 <= FirstLiveBirthAge < 25:
+
+        return self.CalculateRisk(riskindex,CurrentAge,ProjectionAge, ageindicator, NumberOfBiopsy,
+                                  MenarcheAge, FirstLiveBirthAge, everhadbiopsy, FirstDegRelatives, hyperplasia,
+                                  realHyp, race)
+
+
+
 
     '''
     Line 755 BCPT.cs
