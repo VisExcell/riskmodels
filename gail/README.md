@@ -22,7 +22,7 @@ Patient age at first live birth
 Has the patient had a biopsy of the breast?
 
     0: No
-    1: Yes
+    1: Yes / Unknown
 
 ####"num_biopsy"
 Number of biopsies the patient has had
