@@ -1,3 +1,30 @@
+Table of Contents
+
+- [API Info](#API-Info)
+- [Input JSON](#Input-JSON)
+- [Output JSON](#Output-JSON)
+
+#API Info
+API endpoint: /api/v1.0/gail
+
+POST JSON to perform calculation
+make sure to set the HTTP header:
+
+_Content-Type: application/json_
+
+#Input JSON
+
+    {
+      "age":48,
+      "menarch_age":2,
+      "live_birth_age":3,
+      "ever_had_biopsy":1,
+      "num_biopsy":2,
+      "first_deg_relatives":2,
+      "ihyp":1,
+      "race":1
+    }
+
 ##Patient Age
 cancer.gov question 3: 
 > "What is the woman's age?
@@ -131,6 +158,36 @@ VE calculator field name: `race`
 
 - Note: for 'Hispanic' and cancaer.gov gives a pop up saying "Assessments for Hispanic women are subject to greater uncertainty than those for white and African American women. Researchers are conducting additional studies, including studies with minority populations, to gather more data and to increase the accuracy of the tool for women in these populations."
 - Note: for 'Unknown' and 'American Indian or Alaskan Native' cancer.gov gives a pop up note "Assessments for American Indian or Alaskan Native women are uncertain and are based on data for **white women**. Researchers are conducting additional studies, including studies with minority populations, to gather more data and to increase the accuracy of the tool for women in these populations." (Emphasis is added by SRM)
+
+
+#Output JSON
+
+    {
+      "date": "2016-06-10",
+      "results": {
+        "five_year_abs": 0.058523657523393072,
+        "five_year_ave": 0.011606210299941746,
+        "lifetime_abs": 0.5743854504918563,
+        "lifetime_ave": 0.1148439582786286
+      }
+    }
+
+Currently this model only supports a basic output format.
+
+####"date"
+Date that the calculation was performed in the format YYYY-MM-DD
+
+####"results"
+there are four results produced. All values are in decimal format (i.e. 0.0585... for a 5.8% value)
+
+*five_year_abs* - This is the 5 year risk value for the specified patient.
+
+*five_year_ave* - This is the 5 year risk value for an average patient of the same age/race.
+
+*lifetime_abs* - This is the lifetime risk value for the specified patient. (This is calculated with a projection age of 90)
+
+*lifetime_ave* - This is the lifetime risk value for an average patient of the same age/race. (This is calculated with a projection age of 90)
+
 
 
 Notes about indicators from withing original C# Calculate Risk:
