@@ -66,12 +66,14 @@ VE calculator field name: `num_biopsy`
 | Option Text | VE Calc Value | cancer.gov Value |
 | ----------- | ------------- | ---------------- |
 | Select      | N/A           | 999              |
-| (Unknown)   | 1             | N/A              |
-| (Zero)      | 0             | N/A              |
+| (Unknown)   | 1             | 99               |
+| (Zero)      | 0             | 0                |
 | 1           | 1             | 1                |
 | > 1         | 2             | 2                |
 
- - Note: The cancer.org site doesn't have options for Unknown or Zero. This is partially dependent on the answer to 7.
+ - Note: The cancer.org site doesn't have options for 'Unknown' or 'Zero'.
+ 	- Use (Unknown) if answer to 7 is 'Unknown'
+ 	- Use (Zero) if answer to 7 is 'No'
 
 ####Atypical Hyperplasia?
 cancer.org question 7b:
@@ -85,6 +87,9 @@ VE calculator field name: `ihyp`
 | Unknown     | 99            | 99               |
 | No          | 0             | 0                |
 | Yes         | 1             | 1                |
+
+- Use Unknown if answer to 7 is 'Unknown'
+- Use Zero if answer to 7 is 'No'
 
 ##First Degree relatives with Breast Cancer
 cancer.gov question 6:
