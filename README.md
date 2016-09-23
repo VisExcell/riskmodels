@@ -5,6 +5,7 @@ Python risk models
 
 ## GAIL model
 This model was ported from the C# code provided by NCI
+[API Documentation](gail/README.md) 
 
 ###API Info
 API endpoint: /api/v1.0/gail
