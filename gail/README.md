@@ -75,7 +75,7 @@ VE calculator field name: `num_biopsy`
  	- Use (Unknown) if answer to 7 is 'Unknown'
  	- Use (Zero) if answer to 7 is 'No'
 
-####Atypical Hyperplasia?
+###Atypical Hyperplasia?
 cancer.org question 7b:
 > Has the woman had at least one breast biopsy with atypical hyperplasia? 
 
