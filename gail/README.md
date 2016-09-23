@@ -102,8 +102,9 @@ VE calculator field name: `first_deg_relatives`
 
 ##Patient's Race
 cancer.gov questions 8 and 8a:
-> 8. What is the woman's race/ethnicity?
-> 8a. What is the sub race/ethnicity?
+> 8: What is the woman's race/ethnicity?
+> 
+> 8a: What is the sub race/ethnicity?
 
 VE calculator field name: `race`
 
