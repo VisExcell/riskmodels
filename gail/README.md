@@ -1,65 +1,130 @@
-####"age"
-Age of the patient values:
+##Patient Age
+cancer.gov question 3: 
+> "What is the woman's age?
+> *This tool only calculates risk for women 35 years of age or older.*"
 
-    35 - 85
+VE calculator field name: `age`
 
-####"menarch_age"
-Age at Menarch
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 99               |
+| < 35        | N/A           | 34               |
+| 35..85      | 35..85        | 35..85
 
-    0: Age 14 and up, or Unknown
-    1: 12 - 13
-    2: 7 - 11
+ - Note: there is a single entry per age for 35..85
+ - Note: cancer.org does a JS check on age when selecting. 
 
-####"live_birth_age"
-Patient age at first live birth
+##Age at Menarch
+cancer.gov question 4: 
+> "What was the woman's age at the time of her first menstrual period?"
 
-    0: Less than 20 or Unknown
-    1: 20 - 24
-    2: 25 - 29, or No Birth
-    3: 30 - 55
+VE calculator field name: `menarch_age`
 
-####"ever_had_biopsy"
-Has the patient had a biopsy of the breast?
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 999              |
+| Unknown     | 0             | 99               |
+| 7 to 11     | 2             | 10               |
+| 12 to 13    | 1             | 13               |
+| > =14       | 0             | 14               |
 
-    0: No
-    1: Yes / Unknown
+##Age at first live brith
+cancer.gov question 5:
+> What was the woman's age at the time of her first live birth of a child?
 
-####"num_biopsy"
-Number of biopsies the patient has had
+VE calculator field name: `live_birth_age`
 
-    0: Zero / Never had a biopsy
-    1: One / Unknown number of biopsies
-    2: More than one biopsy
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 999              |
+| Unknown     | 0             | 99               |
+| No Births   | 2             | 0                |
+| < 20        | 0             | 15               |
+| 20 to 24    | 1             | 22               |
+| 25 to 29    | 2             | 27               |
+| > =30       | 3             | 30               |
 
-####"first_deg_relatives"
-Number of first degree relatives that have had breast cancer
+##Has the patient had a bread biopsy
+cancer.gov question 7:
+> Has the woman ever had a breast biopsy? 
 
-    0: Zero or Unknown
-    1: One Relative
-    2: More than one Relative
+VE calculator field name: `ever_had_biopsy`
 
-####"ihyp"
-Had at least one breast biopsy with atypical hyperplasia
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 999              |
+| Unknown     | 1             | 99               |
+| No          | 0             | 0                |
+| Yes         | 1             | 1                |
 
-    0: No
-    1: Yes
-    99: Unknown
+###How many biopsies
+cancer.gov question 7a:
+> How many breast biopsies (positive or negative) has the woman had?
 
-####"race"
-Patient's Race
+VE calculator field name: `num_biopsy`
 
-    1:   White, Other
-    2:   African American
-    3:   Hispanic
-        4:   Asian-American                     UNUSED!!!
-        5:   American Indian or Alaskan Native  UNUSED!!!
-        6:   Unknown                            UNUSED!!! default to #1 for unknown
-    7:   Chinese
-    8:   Japanese
-    9:   Filipino
-    10:  Hawaiian
-    11:  Other Pacific Islander
-    12:  Other Asian-American
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 999              |
+| (Unknown)   | 1             | N/A              |
+| (Zero)      | 0             | N/A              |
+| 1           | 1             | 1                |
+| > 1         | 2             | 2                |
+
+ - Note: The cancer.org site doesn't have options for Unknown or Zero. This is partially dependent on the answer to 7.
+
+####Atypical Hyperplasia?
+cancer.org question 7b:
+> Has the woman had at least one breast biopsy with atypical hyperplasia? 
+
+VE calculator field name: `ihyp`
+
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 999              |
+| Unknown     | 99            | 99               |
+| No          | 0             | 0                |
+| Yes         | 1             | 1                |
+
+##First Degree relatives with Breast Cancer
+cancer.gov question 6:
+> How many of the woman's first-degree relatives - mother, sisters, daughters - have had breast cancer?
+
+VE calculator field name: `first_deg_relatives`
+
+| Option Text | VE Calc Value | cancer.gov Value |
+| ----------- | ------------- | ---------------- |
+| Select      | N/A           | 999              |
+| Unknown     | 0             | 99               |
+| Zero        | 0             | 0                |
+| 1           | 1             | 1                |
+| > 1         | 2             | 2                |
+
+##Patient's Race
+cancer.gov questions 8 and 8a:
+> 8. What is the woman's race/ethnicity?
+> 8a. What is the sub race/ethnicity?
+
+VE calculator field name: `race`
+
+| Option Text #8   | Option Text #8a | VE Calc Value | cancer.gov #8 Value | cancer.gov #8a Value |
+| --------------   | --------------- | ------------- | ------------------- | -------------------- |
+| Select           | Select          | N/A           | 999                 | 999                  |
+| White            | 'n/a'           | 1             | 1                   | 99                   |
+| African American | 'n/a'           | 2             | 2                   | 99                   |
+| Hispanic         | 'n/a'           | 3             | 3                   | 99                   |
+| Asian   American | '(select)'      | N/A           | 4                   | 999                  |
+| Asian   American | Chinese         | 7             | 4                   | 7                    |
+| Asian   American | Japanese        | 8             | 4                   | 8                    |
+| Asian   American | Filipino        | 9             | 4                   | 9                    |
+| Asian   American | Hawaiian        | 10            | 4                   | 10                   |
+| Asian   American | Other Pacific Islander | 11            | 4                   | 11                   |
+| Asian   American | Other Asian-American   | 12            | 4                   | 12                   |
+| American Indian or Alaskan Native | 'n/a' | 1             | 5                   | 99                   |
+| Unknown                           | 'n/a' | 1             | 6                    | 99                   |
+
+- Note: for 'Hispanic' and cancaer.gov gives a pop up saying "Assessments for Hispanic women are subject to greater uncertainty than those for white and African American women. Researchers are conducting additional studies, including studies with minority populations, to gather more data and to increase the accuracy of the tool for women in these populations."
+- Note: for 'Unknown' and 'American Indian or Alaskan Native' cancer.gov gives a pop up note "Assessments for American Indian or Alaskan Native women are uncertain and are based on data for **white women**. Researchers are conducting additional studies, including studies with minority populations, to gather more data and to increase the accuracy of the tool for women in these populations." (Emphasis is added by SRM)
 
 
 Notes about indicators from withing original C# Calculate Risk:
