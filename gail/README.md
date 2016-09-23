@@ -1,8 +1,8 @@
 Table of Contents
 
-- [API Info](#API-Info)
-- [Input JSON](#Input-JSON)
-- [Output JSON](#Output-JSON)
+- [API Info](#api-info)
+- [Input JSON](#input-json)
+- [Output JSON](#output-json)
 
 #API Info
 API endpoint: /api/v1.0/gail
