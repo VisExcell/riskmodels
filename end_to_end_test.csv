@@ -1,0 +1,82 @@
+birthdate,ethnicity,age_at_first_born,menstral_cycle_start,chest_rad_therapy,syndromes_options,brca_options,family_bc_options,self_bc_options,dcis_options,lcis_options,biopsy_options
+09/28/1953,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1986,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1979,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1928,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Other Pacific Islander,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,American Indian or Alaskan Native,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Filipino,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Unknown,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Hispanic,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Other Asian American,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Hawaiian,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Chinese,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,African American / Black,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,Japanese,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,15,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,23,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,Unknown,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,28,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,36,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,Not Sure,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,14-older,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,7-11,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,Not Sure,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,Mother @ 58,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,Sister @ 40,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,Daughter @ 36,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,"Sister @ 40, Mother @ 58",No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,"Daughter @ 36, Mother @ 58",No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,"Sister @ 40, Daughter @ 36",No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,"Sister @ 40, Daughter @ 36, Mother @ 58",No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Yes - 2 - No Hyp
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Yes - 1 - Hyp
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Unknown
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Yes - 1 - No Hyp
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Yes - 1 - Unknown Hyp
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Yes - 2 - Hyp
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,Yes - 2 - Unknown Hyp
+09/28/1967,White,None,12-13,No,No,Not Sure,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Parent, Sibling, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Me,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Parent,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Sibling,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Child,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Parent",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Sibling",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Parent, Sibling",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Parent, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Sibling, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Parent, Sibling",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Parent, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Me, Sibling, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,"Parent, Sibling, Child",No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,Yes,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,Not Sure,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,Yes,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,Not Sure,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,Yes,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,Not Sure,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,Yes,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,Not Sure,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,Not Sure,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,"Li-Fraumeni Syndrom, Cowden Syndrome, Bannayan-Riley-Ruvalcaba Syndrome",Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,Li-Fraumeni Syndrom,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,Cowden Syndrome,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,Bannayan-Riley-Ruvalcaba Syndrome,Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,"Li-Fraumeni Syndrom, Cowden Syndrome",Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,"Li-Fraumeni Syndrom, Bannayan-Riley-Ruvalcaba Syndrome",Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,"Cowden Syndrome, Bannayan-Riley-Ruvalcaba Syndrome",Nobody,No,No,No,No,No
+09/28/1967,White,None,12-13,No,No,Nobody,No,No,No,No,No
