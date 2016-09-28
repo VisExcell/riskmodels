@@ -294,26 +294,13 @@ def get_results(options):
     return options
 
 
-defaults = {"birthdate": today.replace(year=today.year - 49).strftime(dt_fmt),
-            "ethnicity": "White",
-            "age_at_first_born": "None",
-            "menstral_cycle_start": "12-13",
-            "chest_rad_therapy": "No",
-            "syndromes_options": ["No"],
-            "brca_options": ["Nobody"],
-            "family_bc_options": "No",
-            "self_bc_options": "No",
-            "dcis_options": "No",
-            "lcis_options": "No",
-            "biopsy_options": "No"}
-
 finalrows = create_test_rows()
 print finalrows[1]
 with open('end_to_end_test.csv', 'wb') as csvfile:
     testwriter = csv.writer(csvfile)
     testwriter.writerow(["birthdate", "ethnicity", "age_at_first_born", "menstral_cycle_start", "chest_rad_therapy",
                          "syndromes_options", "brca_options", "family_bc_options", "self_bc_options", "dcis_options",
-                         "lcis_options", "biopsy_options"])
+                         "lcis_options", "biopsy_options", "five_year_abs", "five_year_ave","lifetime_abs","lifetime_ave"])
     for row in finalrows:
         rowobj = get_results(row)
         if type(rowobj["family_bc_options"]) == type("STRING"):
@@ -335,5 +322,9 @@ with open('end_to_end_test.csv', 'wb') as csvfile:
                      rowobj["self_bc_options"],
                      rowobj["dcis_options"],
                      rowobj["lcis_options"],
-                     rowobj["biopsy_options"]]
+                     rowobj["biopsy_options"],
+                     rowobj["results"]["five_year_abs"],
+                     rowobj["results"]["five_year_ave"],
+                     rowobj["results"]["lifetime_abs"],
+                     rowobj["results"]["lifetime_ave"],]
         testwriter.writerow(rowoutput)
