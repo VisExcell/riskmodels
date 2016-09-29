@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Test Flask Project"
+    return "VisExcell Calculators"
 
 @app.route('/api/v1.0/gail', methods=['POST'])
 def doGailCalc():
