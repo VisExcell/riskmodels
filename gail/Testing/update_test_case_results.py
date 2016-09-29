@@ -5,7 +5,7 @@ import time
 conn = sqlite3.connect('GailServiceTestDB.sqlite')
 cur = conn.cursor()
 
-fh = open("gailTestOutput2.csv")
+fh = open("/tmp/gailTestOutput.csv")
 
 
 cur.execute('''CREATE TABLE IF NOT EXISTS UpdatedGailTestCases
