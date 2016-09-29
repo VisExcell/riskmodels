@@ -1,0 +1,22 @@
+Procfile
+createEndToEndTestGrid.py
+end_to_end_test.csv
+end_to_end_test.json
+
+#gail specific stuff we don't need
+gail/Testing
+gail/csharpSource
+gailTestOutput.csv
+
+#We dont' need the readmes up there
+**/*.md
+
+#python compiled bits
+**/*.pyc
+
+#git stuff not needed in docker
+.gitignore
+
+#Docker stuff not needed IN the image
+Dockerfile
+.dockerignore
