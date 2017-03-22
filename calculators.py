@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request
 from flask import abort
-from gail import gail
+from gail import gail, gail_api
 import numpy as np
-import datetime
 from RiskAssessment import BasicRiskAssessment as assessment
+
 
 app = Flask(__name__)
 
@@ -11,6 +11,19 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return "VisExcell Calculators"
+
+@app.route('/api/v2.0/gail', methods=['POST'])
+def doGailCalcv2():
+    if not request.json: # TODO add more validation
+        abort(400)
+    else:
+        gailapi = gail_api.GailAPI()
+        calculation = gailapi.run(request.json)
+        if calculation["code"] != 200:
+            abort(calculation["code"])
+        else:
+            return jsonify(calculation)
+
 
 @app.route('/api/v1.0/gail', methods=['POST'])
 def doGailCalc():

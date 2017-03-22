@@ -21,6 +21,9 @@ class GailRiskCalculator:
 
         self.rf2 = np.zeros((2,13),dtype=np.float64)
 
+    def range_check(self, jsonin):
+        return missing, out
+
     def Initialize(self):
         # age categories boundaries * /
         self.t[0] = 20.0
@@ -686,7 +689,7 @@ class GailRiskCalculator:
                          FirstLiveBirthAge,
                          FirstDegRelatives,
                          everhadbiopsy=99,    # 99: unknown, 1: yes, 0: no
-                         NumberOfBiopsy=99,    # 0: no, 1: One, or unknown buy have had biopsy, 2: more than one
+                         NumberOfBiopsy=99,    # 0: no, 1: One, or unknown but have had biopsy, 2: more than one
                          hyperplasia=99,  # [ 1: yes, 0: no, 99: Unknown or never had biopsy
                          race=1):
 
