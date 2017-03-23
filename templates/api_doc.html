@@ -1,0 +1,50 @@
+{%  extends "bootstrap/base.html" %}
+{%  block title %}VisExcell API For {{ name }} - version {{ version }}{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+    .row-striped:nth-of-type(odd){
+      background-color: #efefef;
+    }
+
+    .row-striped:nth-of-type(even){
+      background-color: #ffffff;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>VisExcell API For {{ name }} - version {{ version }}</h1>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">Field Name</div>
+            <div class="col-md-3">Description</div>
+            <div class="col-md-2">Field Type</div>
+            <div class="col-md-5">Values</div>
+        </div>
+        {%  for field in apidef %}
+        <div class="row form-group row-striped">
+            <div class="col-md-2"><code>{{ field }}</code></div>
+            <div class="col-md-3">{{ apidef[field].description }}</div>
+            <div class="col-md-2">{{ apidef[field].type }}</div>
+            {% if apidef[field].type == "range" %}
+                <div class="col-md-3">
+                <div class="row"><div class="col-md-3">Minimum</div><div class="col-md-3">Maximum</div></div>
+                <div class="row"><div class="col-md-3">{{ apidef[field].minimum }}</div><div class="col-md-3">{{ apidef[field].maximum }}</div></div>
+                </div>
+            {% elif apidef[field].type == "enum" %}
+                <div class="col-md-5">
+                    <div class="row"><div class="col-md-2">Option</div><div class="col-md-3">Meaning</div></div>
+                {% for option in apidef[field].option_descriptions %}
+                    <div class="row form-group-sm"><div class="col-md-2">{{ option }}</div><div class="col-md-5">{{ apidef[field].option_descriptions[option] }}</div></div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        {%  endfor %}
+        </div>
+{%  endblock %}
