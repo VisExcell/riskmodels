@@ -27,8 +27,8 @@ def doGailCalcv2(calculator):
     if not request.json: # TODO add more validation
         abort(400)
     else:
-        gailapi = gail_api.GailAPI()
-        calculation = gailapi.run(request.json)
+        # gailapi = gail_api.GailAPI()
+        calculation = calc.run(request.json)
         if calculation["code"] != 200:
             # abort(calculation["code"])
             # print "Errors were found in input!"

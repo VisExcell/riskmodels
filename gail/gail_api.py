@@ -126,6 +126,7 @@ class GailAPI:
 
     def validate_inputs(self, inputs):
         in_keys = inputs.keys()
+        #print in_keys
         missing = list(filter(lambda x: x not in in_keys, self.get_input_field_names()))
         extra = list(filter(lambda x: x not in self.get_input_field_names(), in_keys))
         valid = list(filter(lambda x: x in self.get_input_field_names(), in_keys))
@@ -150,13 +151,14 @@ class GailAPI:
 
     def run(self, inputs):
         errors = self.validate_inputs(inputs)
+        print len(errors.keys())
         return_obj = {"code": 200}
         ra_obj = None
         # print "out_of_bounds" not in errors.keys()
         if len(errors.keys()) > 0:
             return_obj["code"] = 400
             return_obj["errors"] = errors
-        if len(errors.keys()) == 0 or "out_of_bounds" not in errors.keys():
+        if len(errors.keys()) == 0 or ("out_of_bounds" not in errors.keys() and "missing" not in errors.keys()):
             # if none of the inputs are 'wrong', go ahead and run the risk calculation anyway
             ra_obj = self.do_calculation(inputs)
             return_obj["assessment"] = ra_obj.getJson()
