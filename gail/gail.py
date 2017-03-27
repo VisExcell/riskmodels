@@ -21,8 +21,8 @@ class GailRiskCalculator:
 
         self.rf2 = np.zeros((2,13),dtype=np.float64)
 
-    def range_check(self, jsonin):
-        return missing, out
+    # def range_check(self, jsonin):
+    #     return missing, out
 
     def Initialize(self):
         # age categories boundaries * /
@@ -680,6 +680,51 @@ class GailRiskCalculator:
         return self.CalculateRiskAPI(2, CurrentAge, ProjectionAge, MenarcheAge, FirstLiveBirthAge, FirstDegRelatives,
                                      EverHadBiopsy,NumberOfBiopsy,ihyp,irace)
 
+    @staticmethod
+    def clean_biopsy_inputs(ever_had_biopsy, num_biopsy, hyperplasia):
+        # entry values taken from NCI website
+
+        # Following from Helper.cs and BCPTConvert.cs
+        # BCPTConvert.EverHadBiopsy()
+        if ever_had_biopsy == 99:
+            ever_had_biopsy = 0
+
+        # BCPTConvert.NumberOfBiopsy()
+        if ever_had_biopsy == 1 and (num_biopsy == 99):
+            num_biopsy = 1
+        elif ever_had_biopsy == 0:
+            num_biopsy = 0
+
+        if 1 < num_biopsy <= 30:
+            num_biopsy = 2
+
+        # BCPTConvert.Hyperplasia()
+        if ever_had_biopsy == 0:
+            hyperplasia = 99
+
+        #if ever_had_biopsy == 99:
+        #    num_biopsy = 99
+        #    hyperplasia = 99
+
+        #if ever_had_biopsy == 0:
+        #    num_biopsy = 0
+        #    hyperplasia = 0
+
+        # Copied from our code
+        #if ever_had_biopsy == 0 or ever_had_biopsy == 99:
+        #    num_biopsy = 0
+        #    hyperplasia = 99
+
+        # Copied from our code
+        #if ever_had_biopsy == 1 and (num_biopsy == 99 or num_biopsy == 0):
+        #    num_biopsy = 1
+
+        # Copied from our code
+        #if 1 < num_biopsy <= 30:
+        #    num_biopsy = 2
+
+        return ever_had_biopsy, num_biopsy, hyperplasia
+
     ''' New API calculate risk entry point '''
     def CalculateRiskAPI(self,
                          riskindex,
@@ -700,31 +745,32 @@ class GailRiskCalculator:
 
         # Clean up biopsy inputs
 
-        if everhadbiopsy == 0:
-            NumberOfBiopsy = 0
-            hyperplasia = 99
+        #print "API1: EVH: %d, Num: %d, Hyp: %d" % (everhadbiopsy, NumberOfBiopsy, hyperplasia)
 
-        if everhadbiopsy == 99:
-            NumberOfBiopsy = 99
-        elif NumberOfBiopsy == 0 or (everhadbiopsy == 99 and NumberOfBiopsy == 99):
-            NumberOfBiopsy = 0
-        elif NumberOfBiopsy == 1 or (everhadbiopsy == 1 and NumberOfBiopsy == 99):
-            NumberOfBiopsy = 1
-        elif 1 < NumberOfBiopsy <= 30:
-            NumberOfBiopsy = 2
-        else:
-            NumberOfBiopsy = 0  # Inputs are out of bounds... or everhadbiopsy == 0
+        everhadbiopsy, NumberOfBiopsy, hyperplasia = self.clean_biopsy_inputs(everhadbiopsy, NumberOfBiopsy, hyperplasia)
+        # level set everhadbiopsy (99 -> 0)
+        #if everhadbiopsy == 99:
+        #    everhadbiopsy = 0
 
+        #if everhadbiopsy == 0 or everhadbiopsy == 99:
+        #    NumberOfBiopsy = 0
+        #    hyperplasia = 99
+
+        #if everhadbiopsy == 1 and (NumberOfBiopsy == 99 or NumberOfBiopsy == 0):
+        #    NumberOfBiopsy = 1
+
+        #if 1 < NumberOfBiopsy <= 30:
+        #    NumberOfBiopsy = 2
+        #else:
+        #    NumberOfBiopsy = 0  # Inputs are out of bounds... or everhadbiopsy == 0
+
+        #print "API2: EVH: %d, Num: %d, Hyp: %d" % (everhadbiopsy, NumberOfBiopsy, hyperplasia)
 
         realHyp = np.float64(1.0)   # Zero Biopsy or Unknown
         if hyperplasia == 1:
             realHyp = np.float64(1.82)  # Yes to hyperplasia
         elif hyperplasia == 0:
             realHyp = np.float64(0.93)  # No to hyperplasia but yes to biopsy
-
-        # level set everhadbiopsy (99 -> 0)
-        if everhadbiopsy == 99:
-            everhadbiopsy = 0
 
         # Clean up first deg relatives for race values
         if FirstDegRelatives == 0 or FirstDegRelatives == 99:

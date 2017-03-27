@@ -57,7 +57,8 @@ def main():
                           2]    # more than one
 
     ''' Ever had a biopsy? '''
-    biopsyVals = [0,    # No or Unknown (99)
+    biopsyVals = [99,   # Unknown  (To test if different)
+                  0,    # No or Unknown (99)
                   1]    # Yes
 
     ''' How many biopsies?'''
@@ -65,7 +66,7 @@ def main():
     #                 1,     # One or had biopsy but unknown number
     #                 2]     # More than one
     #
-    # Since we'retaking care of no biopsies seperatly, these will only have the yes I've had a biopsy values for loops
+    # Since we're taking care of no biopsies separately, these will only have the yes I've had a biopsy values for loops
 
     numBiopsyVals = [1,  # One or had biopsy but unknown number
                      2]  # More than one
@@ -89,7 +90,7 @@ def main():
 
     print "Gail Model initalized, begining looping"
 
-    with open('/tmp/gailTestOutput.csv','wb') as outputfile:
+    with open('/tmp/gailTestOutput_3-24-2017_v2.0.csv','wb') as outputfile:
         outputwriter = csv.writer(outputfile)
         '''Loop through values'''
         for irace in raceValues:
@@ -106,53 +107,54 @@ def main():
                             currentRowBase = [irace,age,menarch,livebirthage,numrelatives]
                             # No Biopsy (or unknown)
                             # full row would be rowbase + [(5)number of biopsies, (6)ever had  biopsy, (7)ihyp, (8)rhyp]
-                            currentRow = currentRowBase + [0, 0, 0, np.float64(1.0)]
-                            fiveYearRiskAbs = gailModel.CalculateAbsoluteRisk(currentRow[1],
-                                                                              currentRow[1] + 5,
-                                                                              ageInd,
-                                                                              currentRow[5],
-                                                                              currentRow[2],
-                                                                              currentRow[3],
-                                                                              currentRow[6],
-                                                                              currentRow[4],
-                                                                              currentRow[7],
-                                                                              currentRow[8],
-                                                                              currentRow[0])
-                            fiveYearRiskAve = gailModel.CalculateAeverageRisk(currentRow[1],
-                                                                              currentRow[1] + 5,
-                                                                              ageInd,
-                                                                              currentRow[5],
-                                                                              currentRow[2],
-                                                                              currentRow[3],
-                                                                              currentRow[6],
-                                                                              currentRow[4],
-                                                                              currentRow[7],
-                                                                              currentRow[8],
-                                                                              currentRow[0])
-                            lifetimeRiskAbs = gailModel.CalculateAbsoluteRisk(currentRow[1],
-                                                                              90,
-                                                                              ageInd,
-                                                                              currentRow[5],
-                                                                              currentRow[2],
-                                                                              currentRow[3],
-                                                                              currentRow[6],
-                                                                              currentRow[4],
-                                                                              currentRow[7],
-                                                                              currentRow[8],
-                                                                              currentRow[0])
-                            lifetimeRiskAve = gailModel.CalculateAeverageRisk(currentRow[1],
-                                                                              90,
-                                                                              ageInd,
-                                                                              currentRow[5],
-                                                                              currentRow[2],
-                                                                              currentRow[3],
-                                                                              currentRow[6],
-                                                                              currentRow[4],
-                                                                              currentRow[7],
-                                                                              currentRow[8],
-                                                                              currentRow[0])
-                            currentRow = currentRow + [fiveYearRiskAbs,fiveYearRiskAve,lifetimeRiskAbs,lifetimeRiskAve]
-                            outputwriter.writerow(currentRow)
+                            for ehb in [0,99]: # Check difference for never had, and unknown.  Might need to work this more
+                                currentRow = currentRowBase + [ehb, 0, 0, np.float64(1.0)]
+                                fiveYearRiskAbs = gailModel.CalculateAbsoluteRisk(currentRow[1],
+                                                                                  currentRow[1] + 5,
+                                                                                  ageInd,
+                                                                                  currentRow[5],
+                                                                                  currentRow[2],
+                                                                                  currentRow[3],
+                                                                                  currentRow[6],
+                                                                                  currentRow[4],
+                                                                                  currentRow[7],
+                                                                                  currentRow[8],
+                                                                                  currentRow[0])
+                                fiveYearRiskAve = gailModel.CalculateAeverageRisk(currentRow[1],
+                                                                                  currentRow[1] + 5,
+                                                                                  ageInd,
+                                                                                  currentRow[5],
+                                                                                  currentRow[2],
+                                                                                  currentRow[3],
+                                                                                  currentRow[6],
+                                                                                  currentRow[4],
+                                                                                  currentRow[7],
+                                                                                  currentRow[8],
+                                                                                  currentRow[0])
+                                lifetimeRiskAbs = gailModel.CalculateAbsoluteRisk(currentRow[1],
+                                                                                  90,
+                                                                                  ageInd,
+                                                                                  currentRow[5],
+                                                                                  currentRow[2],
+                                                                                  currentRow[3],
+                                                                                  currentRow[6],
+                                                                                  currentRow[4],
+                                                                                  currentRow[7],
+                                                                                  currentRow[8],
+                                                                                  currentRow[0])
+                                lifetimeRiskAve = gailModel.CalculateAeverageRisk(currentRow[1],
+                                                                                  90,
+                                                                                  ageInd,
+                                                                                  currentRow[5],
+                                                                                  currentRow[2],
+                                                                                  currentRow[3],
+                                                                                  currentRow[6],
+                                                                                  currentRow[4],
+                                                                                  currentRow[7],
+                                                                                  currentRow[8],
+                                                                                  currentRow[0])
+                                currentRow = currentRow + [fiveYearRiskAbs,fiveYearRiskAve,lifetimeRiskAbs,lifetimeRiskAve]
+                                outputwriter.writerow(currentRow)
                             for numbiopsy in numBiopsyVals:
                                 for hyp in range(0,3): #rhypValues:
                                     # full row would be rowbase + [(5)number of biopsies, (6)ever had  biopsy, (7)ihyp, (8)rhyp]
@@ -204,7 +206,7 @@ def main():
                                     currentRow = currentRow + [fiveYearRiskAbs, fiveYearRiskAve, lifetimeRiskAbs,
                                                                lifetimeRiskAve]
                                     outputwriter.writerow(currentRow)
-    print "done?"
+    print "done"
 
 if __name__ == "__main__":
     main()

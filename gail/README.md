@@ -80,7 +80,7 @@ VE calculator field name: `ever_had_biopsy`
 | Option Text | VE Calc Value | cancer.gov Value |
 | ----------- | ------------- | ---------------- |
 | Select      | N/A           | 999              |
-| Unknown     | 1             | 99               |
+| Unknown     | 0 or 99       | 99               |
 | No          | 0             | 0                |
 | Yes         | 1             | 1                |
 

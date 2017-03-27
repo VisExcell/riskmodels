@@ -63,13 +63,14 @@ class GailAPI:
                                         "3": "30 years old or older"}},
             "ever_had_biopsy": {"description": "Has the patient ever had a breast biopsy?",
                                 "type": "enum",
-                                "values": [0, 1],
-                                "option_descriptions": {"0": "No",
-                                                        "1": "Unknown or Yes"}},
+                                "values": [99, 0, 1],
+                                "option_descriptions": {"0": "No or Unknown",
+                                                        "1": "Yes",
+                                                        "99": "Unknown (Functionally same as 0)"}},
             "first_deg_relatives": {
                 "description": "How many of the patient's first-degree relatives - mother, sisters, daughters - have had breast cancer?",
                 "type": "enum",
-                "values": [0, 1, 2],
+                "values": [0, 1, 2, 99],
                 "option_descriptions": {"0": "Unknown or None",
                                         "1": "One relative",
                                         "2": "More than one relative"}},
@@ -167,12 +168,13 @@ class GailAPI:
     def do_calculation(self, inputs):
         age_indicator = 0 if inputs['age'] < 50 else 1
         rhyp = np.float64(1.0)
-        if inputs['ever_had_biopsy'] == 1:
+        if 'ever_had_biopsy' in inputs.keys() and inputs['ever_had_biopsy'] == 1:
             if inputs['ihyp'] == 0:
                 rhyp = np.float64(0.93)
             elif inputs['ihyp'] == 1:
                 rhyp = np.float(1.82)
-
+        # The rhyp computed here doesn't get used by the following functions - SRM: 3-23-2017
+        # The age_indicator doesn't get used by the following either. - SRM: 3-23-2017
         fiveYearABS = self.calc.CalculateAbsoluteRisk(inputs['age'],
                                                       inputs['age'] + 5,
                                                       age_indicator,
