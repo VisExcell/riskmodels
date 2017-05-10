@@ -71,7 +71,7 @@ VE calculator field name: `live_birth_age`
 | 25 to 29    | 2             | 27               |
 | > =30       | 3             | 30               |
 
-##Has the patient had a bread biopsy
+##Has the patient had a breast biopsy
 cancer.gov question 7:
 > Has the woman ever had a breast biopsy? 
 
@@ -80,7 +80,7 @@ VE calculator field name: `ever_had_biopsy`
 | Option Text | VE Calc Value | cancer.gov Value |
 | ----------- | ------------- | ---------------- |
 | Select      | N/A           | 999              |
-| Unknown     | 1             | 99               |
+| Unknown     | 0 or 99       | 99               |
 | No          | 0             | 0                |
 | Yes         | 1             | 1                |
 

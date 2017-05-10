@@ -1,16 +1,58 @@
 from flask import Flask, jsonify, request
-from flask import abort
-from gail import gail
+from flask import abort, render_template
+from flask_bootstrap import Bootstrap
+from gail import gail, gail_api
 import numpy as np
-import datetime
 from RiskAssessment import BasicRiskAssessment as assessment
 
-app = Flask(__name__)
 
+app = Flask(__name__)
+Bootstrap(app)
+
+
+def get_calculator(calculator_name):
+    if calculator_name.lower() == "gail":
+        return gail_api.GailAPI()
+    return None
 
 @app.route('/')
 def index():
     return "VisExcell Calculators"
+
+@app.route('/api/v2.0/<calculator>', methods=['POST'])
+def doGailCalcv2(calculator):
+    calc = get_calculator(calculator)
+    if calc is None:
+        abort(501)  # Not Implemented
+    if not request.json: # TODO add more validation
+        abort(400)
+    else:
+        # gailapi = gail_api.GailAPI()
+        calculation = calc.run(request.json)
+        if calculation["code"] != 200:
+            # abort(calculation["code"])
+            # print "Errors were found in input!"
+            return jsonify(calculation)
+        else:
+            return jsonify(calculation)
+
+@app.route('/api/v2.0/<calculator>/json', methods=['GET'])
+def getFieldDescrptionsJson(calculator):
+    calc = get_calculator(calculator)
+    if calc is None:
+        abort(501)  # Not Implemented
+    # gailapi = gail_api.GailAPI()
+    return jsonify(calc.get_input_fields_json())
+
+
+@app.route('/api/v2.0/<calculator>', methods=['GET'])
+def getFieldDescrptions(calculator):
+    calc = get_calculator(calculator)
+    if calc is None:
+        abort(501)  # Not Implemented
+    # gailapi = gail_api.GailAPI()
+    return render_template("api_doc.html", name=calc.get_name(), version="2.0", apidef=calc.get_input_fields_json())
+
 
 @app.route('/api/v1.0/gail', methods=['POST'])
 def doGailCalc():
