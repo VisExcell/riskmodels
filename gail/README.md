@@ -4,7 +4,7 @@ Table of Contents
 - [Input JSON](#input-json)
 - [Output JSON](#output-json)
 
-#API Info
+# API Info
 API endpoint: /api/v1.0/gail
 
 POST JSON to perform calculation
@@ -12,7 +12,7 @@ make sure to set the HTTP header:
 
 _Content-Type: application/json_
 
-#Input JSON
+# Input JSON
 
     {
       "age":48,
@@ -25,7 +25,7 @@ _Content-Type: application/json_
       "race":1
     }
 
-##Patient Age
+## Patient Age
 cancer.gov question 3: 
 > "What is the woman's age?
 > *This tool only calculates risk for women 35 years of age or older.*"
@@ -41,7 +41,7 @@ VE calculator field name: `age`
  - Note: there is a single entry per age for 35..85
  - Note: cancer.org does a JS check on age when selecting. 
 
-##Age at Menarch
+## Age at Menarch
 cancer.gov question 4: 
 > "What was the woman's age at the time of her first menstrual period?"
 
@@ -55,7 +55,7 @@ VE calculator field name: `menarch_age`
 | 12 to 13    | 1             | 13               |
 | > =14       | 0             | 14               |
 
-##Age at first live brith
+## Age at first live brith
 cancer.gov question 5:
 > What was the woman's age at the time of her first live birth of a child?
 
@@ -71,7 +71,7 @@ VE calculator field name: `live_birth_age`
 | 25 to 29    | 2             | 27               |
 | > =30       | 3             | 30               |
 
-##Has the patient had a breast biopsy
+## Has the patient had a breast biopsy
 cancer.gov question 7:
 > Has the woman ever had a breast biopsy? 
 
@@ -84,7 +84,7 @@ VE calculator field name: `ever_had_biopsy`
 | No          | 0             | 0                |
 | Yes         | 1             | 1                |
 
-###How many biopsies
+### How many biopsies
 cancer.gov question 7a:
 > How many breast biopsies (positive or negative) has the woman had?
 
@@ -102,7 +102,7 @@ VE calculator field name: `num_biopsy`
  	- Use (Unknown) if answer to 7 is 'Unknown'
  	- Use (Zero) if answer to 7 is 'No'
 
-###Atypical Hyperplasia?
+### Atypical Hyperplasia?
 cancer.org question 7b:
 > Has the woman had at least one breast biopsy with atypical hyperplasia? 
 
@@ -118,7 +118,7 @@ VE calculator field name: `ihyp`
 - Use Unknown if answer to 7 is 'Unknown'
 - Use Zero if answer to 7 is 'No'
 
-##First Degree relatives with Breast Cancer
+## First Degree relatives with Breast Cancer
 cancer.gov question 6:
 > How many of the woman's first-degree relatives - mother, sisters, daughters - have had breast cancer?
 
@@ -132,7 +132,7 @@ VE calculator field name: `first_deg_relatives`
 | 1           | 1             | 1                |
 | > 1         | 2             | 2                |
 
-##Patient's Race
+## Patient's Race
 cancer.gov questions 8 and 8a:
 > 8: What is the woman's race/ethnicity?
 > 
@@ -160,7 +160,7 @@ VE calculator field name: `race`
 - Note: for 'Unknown' and 'American Indian or Alaskan Native' cancer.gov gives a pop up note "Assessments for American Indian or Alaskan Native women are uncertain and are based on data for **white women**. Researchers are conducting additional studies, including studies with minority populations, to gather more data and to increase the accuracy of the tool for women in these populations." (Emphasis is added by SRM)
 
 
-#Output JSON
+# Output JSON
 
     {
       "date": "2016-06-10",
@@ -174,10 +174,10 @@ VE calculator field name: `race`
 
 Currently this model only supports a basic output format.
 
-####"date"
+#### "date"
 Date that the calculation was performed in the format YYYY-MM-DD
 
-####"results"
+#### "results"
 there are four results produced. All values are in decimal format (i.e. 0.0585... for a 5.8% value)
 
 *five_year_abs* - This is the 5 year risk value for the specified patient.
